@@ -106,20 +106,21 @@ begin
                 next_state <= READ_RAM_REQUEST;
                 
             when READ_RAM_REQUEST =>
-                next_state <= READ_RAM;
-            when READ_RAM =>
                 if o_done_signal = '1' then
                     next_state <= DONE;
                 else
-                    next_state <= WRITE_RAM;
+                    next_state <= READ_RAM;
                 end if;
+                
+            when READ_RAM =>
+                next_state <= WRITE_RAM;
             
             when WRITE_RAM =>
                 next_state <= WRITE_RAM_WAIT;
             when WRITE_RAM_WAIT =>
                 next_state <= READ_RAM_REQUEST;
             when DONE =>
-                next_state <= RESET;
+                next_state <= DONE;
         end case;
                 
     end process;
@@ -151,16 +152,19 @@ begin
                 
             when READ_WORDS_RAM_READ =>
                 reg_words_load <= '1';
+                reg_count_load <= '1'; -- prepare for first number read
                 
                 
             when READ_RAM_REQUEST =>
                 o_en <= '1';
+                
             
             when READ_RAM =>
                 reg_in_load <= '1';
         
             when WRITE_RAM =>
             when WRITE_RAM_WAIT =>
+                reg_count_load <= '1';
             
             when DONE =>
                 o_data <= "11111111";
@@ -271,7 +275,7 @@ begin
         end if;
     end process;
     
-    MUX_COUNT_PROCESS : process(mux_count_rst)
+    MUX_COUNT_PROCESS : process(mux_count_rst, i_rst, reg_count)
     begin
         if i_rst = '1' or mux_count_rst = '1' then
             mux_count <= "11111111";
@@ -281,8 +285,16 @@ begin
     end process;
     
     o_address <= "00000000" & reg_count;
-                
     
+    DONE_COMPARATOR_PROCESS : process(reg_words, mux_count)
+    begin
+        if mux_count <= reg_words then
+            o_done_signal <= '0';
+        else
+            o_done_signal <= '1';
+        --o_done_signal <= reg_words < mux_count;
+        end if;
+    end process;
     
 end architecture behavioral;
 

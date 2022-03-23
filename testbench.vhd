@@ -83,7 +83,7 @@ begin
     tb_rst <= '1';
     wait for c_CLOCK_PERIOD;
     tb_rst <= '0';
-    wait for 1000 ns;
+    wait for 10000 ns;
 end process test;
 
 end projecttb;

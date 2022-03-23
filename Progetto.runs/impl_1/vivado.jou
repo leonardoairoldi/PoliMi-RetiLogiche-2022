@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2021.1 (64-bit)
+# SW Build 3247384 on Thu Jun 10 19:36:33 MDT 2021
+# IP Build 3246043 on Fri Jun 11 00:30:35 MDT 2021
+# Start of session at: Wed Mar 23 17:52:54 2022
+# Process ID: 30380
+# Current directory: D:/dev/reti-logiche-2022/Progetto.runs/impl_1
+# Command line: vivado.exe -log project_reti_logiche.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source project_reti_logiche.tcl -notrace
+# Log file: D:/dev/reti-logiche-2022/Progetto.runs/impl_1/project_reti_logiche.vdi
+# Journal file: D:/dev/reti-logiche-2022/Progetto.runs/impl_1\vivado.jou
+#-----------------------------------------------------------
+source project_reti_logiche.tcl -notrace
