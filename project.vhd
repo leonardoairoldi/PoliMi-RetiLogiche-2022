@@ -24,20 +24,23 @@ architecture behavioral of project_reti_logiche is
         i_clk         : in  std_logic;
         i_rst         : in  std_logic;
         i_data        : in  std_logic_vector(7 downto 0);
-        --o_address     : out std_logic_vector(15 downto 0);
+        o_address     : out std_logic_vector(15 downto 0);
         o_done_signal : out std_logic;
         o_data        : out std_logic_vector(7 downto 0);
         --control signals from the FSM
         reg_in_load : in std_logic;
-        reg_out_load : in std_logic
+        reg_out_load : in std_logic;
+        reg_words_load : in std_logic;
+        reg_count_load : in std_logic;
+        mux_count_rst : in std_logic
     );
     end component;
             
     type fsm_state is (
         RESET, -- resetta tutti i segnali e parte con una nuova operazione
         
-        READ_INIT_RAM_REQUEST,
-        READ_INIT_RAM_READ,
+        READ_WORDS_RAM_REQUEST,
+        READ_WORDS_RAM_READ,
         
         READ_RAM_REQUEST,
         READ_RAM,
@@ -56,6 +59,10 @@ architecture behavioral of project_reti_logiche is
     
     signal reg_in_load : std_logic;
     signal reg_out_load : std_logic;
+    signal reg_words_load : std_logic;
+    signal reg_count_load : std_logic;
+    signal mux_count_rst : std_logic;
+    
     signal o_done_signal : std_logic;
     
     
@@ -65,12 +72,15 @@ begin
         i_clk,
         i_rst,
         i_data,
-        --o_address,
+        o_address,
         o_done_signal,
         o_data,
         
         reg_in_load,
-        reg_out_load
+        reg_out_load,
+        reg_words_load,
+        reg_count_load,
+        mux_count_rst
     );
     
     FSM_STATE_CHANGE : process(i_clk, i_rst)
@@ -88,11 +98,11 @@ begin
         case cur_state is
             when RESET =>
                 --if i_start = '1' then
-                    next_state <= READ_INIT_RAM_REQUEST;
+                    next_state <= READ_WORDS_RAM_REQUEST;
                 --end if;
-            when READ_INIT_RAM_REQUEST =>
-                next_state <= READ_INIT_RAM_READ;
-            when READ_INIT_RAM_READ =>
+            when READ_WORDS_RAM_REQUEST =>
+                next_state <= READ_WORDS_RAM_READ;
+            when READ_WORDS_RAM_READ =>
                 next_state <= READ_RAM_REQUEST;
                 
             when READ_RAM_REQUEST =>
@@ -122,26 +132,32 @@ begin
         
         reg_in_load <= '0';
         reg_out_load <= '0';
-        o_address <= "0000000000000000";
+        reg_words_load <= '0';
+        reg_count_load <= '0';
+        mux_count_rst <= '0';
+        
+        -- o_address <= "0000000000000000";
         o_en <= '0';
         o_we <= '0';
         o_done <= '0';
         
         case cur_state is
             when RESET =>
+                mux_count_rst <= '1'; -- load 0 into the reg_count to read ...
+                reg_count_load <= '1'; -- address [0]
                 
-            when READ_INIT_RAM_REQUEST =>
+            when READ_WORDS_RAM_REQUEST =>
                 o_en <= '1';
-                o_address <= "0000000000000001";
                 
-            when READ_INIT_RAM_READ =>
-                reg_in_load <= '1';
+            when READ_WORDS_RAM_READ =>
+                reg_words_load <= '1';
                 
                 
             when READ_RAM_REQUEST =>
+                o_en <= '1';
             
             when READ_RAM =>
-        
+                reg_in_load <= '1';
         
             when WRITE_RAM =>
             when WRITE_RAM_WAIT =>
@@ -153,6 +169,17 @@ begin
         end case;
      end process;
 end architecture behavioral;
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -177,12 +204,15 @@ entity datapath is
         i_clk         : in  std_logic;
         i_rst         : in  std_logic;
         i_data        : in  std_logic_vector(7 downto 0);
-        --o_address     : out std_logic_vector(15 downto 0);
+        o_address     : out std_logic_vector(15 downto 0);
         o_done_signal : out std_logic;
         o_data        : out std_logic_vector(7 downto 0);
         --control signals from the FSM
         reg_in_load : in std_logic;
-        reg_out_load : in std_logic
+        reg_out_load : in std_logic;
+        reg_words_load : in std_logic;
+        reg_count_load : in std_logic;
+        mux_count_rst : in std_logic
     );
 end datapath;
 
@@ -190,6 +220,10 @@ architecture behavioral of datapath is
 
     signal reg_in : std_logic_vector(7 downto 0);
     signal reg_out : std_logic_vector(7 downto 0);
+    signal reg_words : std_logic_vector(7 downto 0);
+    signal reg_count : std_logic_vector(7 downto 0);
+    
+    signal mux_count : std_logic_vector(7 downto 0);
 
 begin
     
@@ -214,6 +248,39 @@ begin
             end if;
         end if;
     end process;
+    
+    REG_WORDS_PROCESS : process(i_clk, i_rst)
+    begin
+        if i_rst = '1' then
+            reg_words <= "00000000";
+        elsif i_clk'event and i_clk = '1' then
+            if reg_words_load = '1' then
+                reg_words <= i_data;
+            end if;
+        end if;
+    end process;
+    
+    REG_COUNT_PROCESS : process(i_clk, i_rst)
+    begin
+        if i_rst = '1' then
+            reg_count <= "00000000";
+        elsif i_clk'event and i_clk = '1' then
+            if reg_count_load = '1' then
+                reg_count <= mux_count + "00000001";
+            end if;
+        end if;
+    end process;
+    
+    MUX_COUNT_PROCESS : process(mux_count_rst)
+    begin
+        if i_rst = '1' or mux_count_rst = '1' then
+            mux_count <= "11111111";
+        else
+            mux_count <= reg_count;
+        end if;
+    end process;
+    
+    o_address <= "00000000" & reg_count;
                 
     
     
