@@ -32,7 +32,8 @@ architecture behavioral of project_reti_logiche is
         reg_out_load : in std_logic;
         reg_words_load : in std_logic;
         reg_count_load : in std_logic;
-        mux_count_rst : in std_logic
+        mux_count_rst : in std_logic;
+        mux_rw_addr_sel : in std_logic
     );
     end component;
             
@@ -44,6 +45,8 @@ architecture behavioral of project_reti_logiche is
         
         READ_RAM_REQUEST,
         READ_RAM,
+        
+        PARALLELIZE_DEBUG,
         
         WRITE_RAM,
         WRITE_RAM_WAIT,
@@ -62,6 +65,7 @@ architecture behavioral of project_reti_logiche is
     signal reg_words_load : std_logic;
     signal reg_count_load : std_logic;
     signal mux_count_rst : std_logic;
+    signal mux_rw_addr_sel : std_logic;
     
     signal o_done_signal : std_logic;
     
@@ -80,7 +84,8 @@ begin
         reg_out_load,
         reg_words_load,
         reg_count_load,
-        mux_count_rst
+        mux_count_rst,
+        mux_rw_addr_sel
     );
     
     FSM_STATE_CHANGE : process(i_clk, i_rst)
@@ -113,7 +118,12 @@ begin
                 end if;
                 
             when READ_RAM =>
+                next_state <= PARALLELIZE_DEBUG;
+            
+            
+            when PARALLELIZE_DEBUG =>
                 next_state <= WRITE_RAM;
+            
             
             when WRITE_RAM =>
                 next_state <= WRITE_RAM_WAIT;
@@ -136,6 +146,7 @@ begin
         reg_words_load <= '0';
         reg_count_load <= '0';
         mux_count_rst <= '0';
+        mux_rw_addr_sel <= '0';
         
         -- o_address <= "0000000000000000";
         o_en <= '0';
@@ -161,14 +172,19 @@ begin
             
             when READ_RAM =>
                 reg_in_load <= '1';
+            
+            when PARALLELIZE_DEBUG =>
+                reg_out_load <= '1';
         
             when WRITE_RAM =>
+                o_en <= '1';
+                o_we <= '1';
+                mux_rw_addr_sel <= '1';
+                
             when WRITE_RAM_WAIT =>
-                reg_count_load <= '1';
+                reg_count_load <= '1'; -- Increment reg_count for next operation
             
             when DONE =>
-                o_data <= "11111111";
-                o_en <= '0';
                 o_done <= '1';
         end case;
      end process;
@@ -216,7 +232,8 @@ entity datapath is
         reg_out_load : in std_logic;
         reg_words_load : in std_logic;
         reg_count_load : in std_logic;
-        mux_count_rst : in std_logic
+        mux_count_rst : in std_logic;
+        mux_rw_addr_sel : in std_logic
     );
 end datapath;
 
@@ -253,6 +270,8 @@ begin
         end if;
     end process;
     
+    o_data <= reg_out;
+    
     REG_WORDS_PROCESS : process(i_clk, i_rst)
     begin
         if i_rst = '1' then
@@ -278,13 +297,20 @@ begin
     MUX_COUNT_PROCESS : process(mux_count_rst, i_rst, reg_count)
     begin
         if i_rst = '1' or mux_count_rst = '1' then
-            mux_count <= "11111111";
+            mux_count <= "11111111"; -- neg(1)
         else
             mux_count <= reg_count;
         end if;
     end process;
     
-    o_address <= "00000000" & reg_count;
+    MUX_RW_ADDR_PROCESS : process(mux_rw_addr_sel, mux_count, reg_count)
+    begin
+        if i_rst = '1' or mux_rw_addr_sel = '0' then
+            o_address <= "00000000" & reg_count;
+        else
+            o_address <= ("00000000" & mux_count) + "0000001111100111"; -- mux_count + 999
+        end if;
+    end process;
     
     DONE_COMPARATOR_PROCESS : process(reg_words, mux_count)
     begin
