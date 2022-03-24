@@ -102,13 +102,17 @@ begin
         next_state <= cur_state; -- avoiding latches: default assign
         case cur_state is
             when RESET =>
-                --if i_start = '1' then
-                    next_state <= READ_WORDS_RAM_REQUEST;
-                --end if;
+                if i_start = '0' then
+                    next_state <= RESET;
+                else 
+                    next_state <= READ_WORDS_RAM_REQUEST; -- starts with i_start = 1 and i_rst = 0. (Reset is considered in FSM_STATE_CHANGE)
+                end if;
+                
             when READ_WORDS_RAM_REQUEST =>
                 next_state <= READ_WORDS_RAM_READ;
             when READ_WORDS_RAM_READ =>
                 next_state <= READ_RAM_REQUEST;
+                
                 
             when READ_RAM_REQUEST =>
                 if o_done_signal = '1' then
@@ -129,8 +133,14 @@ begin
                 next_state <= WRITE_RAM_WAIT;
             when WRITE_RAM_WAIT =>
                 next_state <= READ_RAM_REQUEST;
+                
+                
             when DONE =>
-                next_state <= DONE;
+                if i_start = '1' then
+                    next_state <= DONE;
+                else
+                    next_state <= RESET;
+                end if; 
         end case;
                 
     end process;
@@ -303,7 +313,7 @@ begin
         end if;
     end process;
     
-    MUX_RW_ADDR_PROCESS : process(mux_rw_addr_sel, mux_count, reg_count)
+    MUX_RW_ADDR_PROCESS : process(mux_rw_addr_sel, mux_count, reg_count, i_rst)
     begin
         if i_rst = '1' or mux_rw_addr_sel = '0' then
             o_address <= "00000000" & reg_count;
