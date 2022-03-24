@@ -33,7 +33,7 @@ architecture behavioral of project_reti_logiche is
         reg_words_load : in std_logic;
         reg_count_load : in std_logic;
         mux_count_rst : in std_logic;
-        mux_rw_addr_sel : in std_logic
+        mux_rw_addr_sel : in std_logic_vector(1 downto 0)
     );
     end component;
             
@@ -48,7 +48,8 @@ architecture behavioral of project_reti_logiche is
         
         PARALLELIZE_DEBUG,
         
-        WRITE_RAM,
+        WRITE_RAM_1,
+        WRITE_RAM_2,
         WRITE_RAM_WAIT,
         
         DONE
@@ -65,7 +66,7 @@ architecture behavioral of project_reti_logiche is
     signal reg_words_load : std_logic;
     signal reg_count_load : std_logic;
     signal mux_count_rst : std_logic;
-    signal mux_rw_addr_sel : std_logic;
+    signal mux_rw_addr_sel : std_logic_vector(1 downto 0);
     
     signal o_done_signal : std_logic;
     
@@ -126,10 +127,12 @@ begin
             
             
             when PARALLELIZE_DEBUG =>
-                next_state <= WRITE_RAM;
+                next_state <= WRITE_RAM_1;
             
             
-            when WRITE_RAM =>
+            when WRITE_RAM_1 =>
+                next_state <= WRITE_RAM_2;
+            when WRITE_RAM_2 =>
                 next_state <= WRITE_RAM_WAIT;
             when WRITE_RAM_WAIT =>
                 next_state <= READ_RAM_REQUEST;
@@ -156,7 +159,7 @@ begin
         reg_words_load <= '0';
         reg_count_load <= '0';
         mux_count_rst <= '0';
-        mux_rw_addr_sel <= '0';
+        mux_rw_addr_sel <= "00";
         
         -- o_address <= "0000000000000000";
         o_en <= '0';
@@ -169,30 +172,39 @@ begin
                 reg_count_load <= '1'; -- address [0]
                 
             when READ_WORDS_RAM_REQUEST =>
+                mux_rw_addr_sel <= "00";
                 o_en <= '1';
                 
             when READ_WORDS_RAM_READ =>
                 reg_words_load <= '1';
-                reg_count_load <= '1'; -- prepare for first number read
+                reg_count_load <= '1'; -- prepare for first number read  (ram[1])
                 
                 
             when READ_RAM_REQUEST =>
+                mux_rw_addr_sel <= "00";
                 o_en <= '1';
                 
-            
             when READ_RAM =>
                 reg_in_load <= '1';
+            
             
             when PARALLELIZE_DEBUG =>
                 reg_out_load <= '1';
         
-            when WRITE_RAM =>
+        
+            when WRITE_RAM_1 =>
                 o_en <= '1';
                 o_we <= '1';
-                mux_rw_addr_sel <= '1';
+                mux_rw_addr_sel <= "01";
+            
+            when WRITE_RAM_2 =>
+                o_en <= '1';
+                o_we <= '1';
+                mux_rw_addr_sel <= "10";
                 
             when WRITE_RAM_WAIT =>
                 reg_count_load <= '1'; -- Increment reg_count for next operation
+            
             
             when DONE =>
                 o_done <= '1';
@@ -243,7 +255,7 @@ entity datapath is
         reg_words_load : in std_logic;
         reg_count_load : in std_logic;
         mux_count_rst : in std_logic;
-        mux_rw_addr_sel : in std_logic
+        mux_rw_addr_sel : in std_logic_vector(1 downto 0)
     );
 end datapath;
 
@@ -315,10 +327,12 @@ begin
     
     MUX_RW_ADDR_PROCESS : process(mux_rw_addr_sel, mux_count, reg_count, i_rst)
     begin
-        if i_rst = '1' or mux_rw_addr_sel = '0' then
+        if i_rst = '1' or mux_rw_addr_sel = "00" or mux_rw_addr_sel = "11" then
             o_address <= "00000000" & reg_count;
-        else
-            o_address <= ("00000000" & mux_count) + "0000001111100111"; -- mux_count + 999
+        elsif mux_rw_addr_sel = "01" then
+            o_address <= ("00000000" & (mux_count + mux_count)) + "0000001111100110"; -- mux_count + 998
+        else --if mux_rw_addr_sel = "10" then
+            o_address <= ("00000000" & (mux_count + mux_count)) + "0000001111100111"; -- mux_count + 999
         end if;
     end process;
     
