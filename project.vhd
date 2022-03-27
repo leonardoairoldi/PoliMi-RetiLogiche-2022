@@ -348,3 +348,104 @@ begin
     
 end architecture behavioral;
 
+
+
+
+
+
+-- SERIALIZER
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use ieee.std_logic_unsigned.all;
+
+entity serializer is
+    port (
+        i_clk         : in  std_logic;
+        i_rst         : in  std_logic;
+        ser_start     : in  std_logic;
+        ser_done      : out std_logic;
+        
+        ser_input     : in std_logic_vector(7 downto 0);
+        ser_output    : out std_logic        
+    );
+end entity;
+
+
+architecture behavioral of serializer is
+
+    signal reg_count_load   : std_logic;
+    signal reg_count        : std_logic_vector(2 downto 0);
+    
+    type ser_state is (
+        STOPPED,
+        ACTIVE_OUT1,
+        ACTIVE_OUT2
+    );
+    
+    signal cur_state : ser_state;
+    signal next_state : ser_state;
+    
+begin
+    FSM_STATE_CHANGE : process(i_clk, i_rst)
+    begin
+        if i_rst = '1' then
+            cur_state <= STOPPED;
+        elsif i_clk'EVENT and i_clk = '1' then
+            cur_state <= next_state;
+        end if;
+    end process;
+    
+    FSM_FLOW : process(cur_state, ser_start, reg_count)
+    begin
+        next_state <= cur_state;
+        case cur_state is
+            when STOPPED =>
+                if ser_start = '1' then 
+                    next_state <= ACTIVE_OUT1;
+                else 
+                    next_state <= STOPPED;
+                end if;
+            when ACTIVE_OUT1 => 
+                next_state <= ACTIVE_OUT2;
+            when ACTIVE_OUT2 =>
+                if reg_count = "111" then
+                    next_state <= STOPPED;
+                else
+                    next_state <= ACTIVE_OUT1;
+                end if;
+            end case;
+    end process;
+    
+    FSM_OUT : process(cur_state)
+    begin
+        ser_done <= '1';
+        reg_count_load <= '0';
+        case cur_state is
+            when STOPPED =>
+                ser_done <= '1';
+            when ACTIVE_OUT1 =>
+                ser_done <= '0';
+            when ACTIVE_OUT2 =>
+                ser_done <= '0';
+                reg_count_load <= '1';
+        end case;
+    end process;
+    
+    REG_COUNT_PROCESS : process(i_rst, ser_start, i_clk)
+    begin
+        if i_rst = '1' or ser_start = '1' then
+            reg_count <= "000";
+        else 
+            if i_clk'event and i_clk = '1' then
+                if reg_count_load = '1' then
+                    reg_count <= reg_count + "001";
+                end if;
+            end if;
+        end if;
+    end process;
+    
+    ser_output <= ser_input(conv_integer(reg_count));
+
+end architecture;
