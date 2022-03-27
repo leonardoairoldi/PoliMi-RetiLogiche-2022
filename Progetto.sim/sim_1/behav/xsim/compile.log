@@ -1,4 +1,0 @@
-INFO: [VRFC 10-163] Analyzing VHDL file "D:/dev/reti-logiche-2022/project.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'project_reti_logiche'
-INFO: [VRFC 10-3107] analyzing entity 'datapath'
-INFO: [VRFC 10-3107] analyzing entity 'serializer'

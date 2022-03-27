@@ -27,6 +27,9 @@ Compiling module unisims_ver.LUT3
 Compiling module unisims_ver.FDCE_default
 Compiling module xil_defaultlib.datapath
 Compiling module unisims_ver.FDPE_default
+Compiling module unisims_ver.x_lut1_mux2
+Compiling module unisims_ver.LUT1(INIT=2'b01)
+Compiling module xil_defaultlib.serializer
 Compiling module unisims_ver.BUFG
 Compiling module unisims_ver.IBUF
 Compiling module unisims_ver.OBUF

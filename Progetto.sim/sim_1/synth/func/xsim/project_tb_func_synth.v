@@ -1,7 +1,7 @@
 // Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2021.1 (win64) Build 3247384 Thu Jun 10 19:36:33 MDT 2021
-// Date        : Thu Mar 24 16:12:14 2022
+// Date        : Sun Mar 27 22:52:16 2022
 // Host        : AIROLDI01 running 64-bit major release  (build 9200)
 // Command     : write_verilog -mode funcsim -nolib -force -file
 //               D:/dev/reti-logiche-2022/Progetto.sim/sim_1/synth/func/xsim/project_tb_func_synth.v
@@ -15,7 +15,6 @@
 module datapath
    (o_address_OBUF,
     D,
-    \reg_out_reg[7]_0 ,
     Q,
     i_rst_IBUF,
     \o_address[2] ,
@@ -24,8 +23,7 @@ module datapath
     CLK);
   output [9:0]o_address_OBUF;
   output [1:0]D;
-  output [7:0]\reg_out_reg[7]_0 ;
-  input [8:0]Q;
+  input [6:0]Q;
   input i_rst_IBUF;
   input \o_address[2] ;
   input i_start_IBUF;
@@ -34,7 +32,7 @@ module datapath
 
   wire CLK;
   wire [1:0]D;
-  wire [8:0]Q;
+  wire [6:0]Q;
   wire i_rst_IBUF;
   wire i_start_IBUF;
   wire leqOp;
@@ -55,16 +53,14 @@ module datapath
   wire \o_address_OBUF[4]_inst_i_2_n_0 ;
   wire \o_address_OBUF[5]_inst_i_2_n_0 ;
   wire \o_address_OBUF[7]_inst_i_2_n_0 ;
-  wire [7:3]plusOp;
-  wire \reg_count[0]_i_1_n_0 ;
-  wire \reg_count[1]_i_1_n_0 ;
-  wire \reg_count[2]_i_1_n_0 ;
+  wire [7:3]plusOp__0;
+  wire \reg_count[0]_i_1__0_n_0 ;
+  wire \reg_count[1]_i_1__0_n_0 ;
+  wire \reg_count[2]_i_1__0_n_0 ;
   wire \reg_count[6]_i_2_n_0 ;
   wire \reg_count[7]_i_3_n_0 ;
   wire reg_count_load;
   wire [7:0]reg_count_reg;
-  wire [7:0]reg_in;
-  wire [7:0]\reg_out_reg[7]_0 ;
   wire [7:0]reg_words;
   wire [7:0]\reg_words_reg[7]_0 ;
   wire [3:0]NLW_leqOp_carry_O_UNCONNECTED;
@@ -176,8 +172,8 @@ module datapath
   LUT4 #(
     .INIT(16'hFD04)) 
     \o_address_OBUF[0]_inst_i_1 
-       (.I0(Q[6]),
-        .I1(Q[7]),
+       (.I0(Q[4]),
+        .I1(Q[5]),
         .I2(i_rst_IBUF),
         .I3(reg_count_reg[0]),
         .O(o_address_OBUF[0]));
@@ -206,8 +202,8 @@ module datapath
     \o_address_OBUF[1]_inst_i_1 
        (.I0(reg_count_reg[0]),
         .I1(Q[0]),
-        .I2(Q[6]),
-        .I3(Q[7]),
+        .I2(Q[4]),
+        .I3(Q[5]),
         .I4(i_rst_IBUF),
         .I5(reg_count_reg[1]),
         .O(o_address_OBUF[1]));
@@ -311,30 +307,30 @@ module datapath
   (* SOFT_HLUTNM = "soft_lutpair3" *) 
   LUT3 #(
     .INIT(8'h01)) 
-    \reg_count[0]_i_1 
+    \reg_count[0]_i_1__0 
        (.I0(reg_count_reg[0]),
         .I1(i_rst_IBUF),
         .I2(Q[0]),
-        .O(\reg_count[0]_i_1_n_0 ));
+        .O(\reg_count[0]_i_1__0_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair3" *) 
   LUT4 #(
     .INIT(16'h0102)) 
-    \reg_count[1]_i_1 
+    \reg_count[1]_i_1__0 
        (.I0(reg_count_reg[0]),
         .I1(Q[0]),
         .I2(i_rst_IBUF),
         .I3(reg_count_reg[1]),
-        .O(\reg_count[1]_i_1_n_0 ));
+        .O(\reg_count[1]_i_1__0_n_0 ));
   (* SOFT_HLUTNM = "soft_lutpair1" *) 
   LUT5 #(
     .INIT(32'h00070008)) 
-    \reg_count[2]_i_1 
+    \reg_count[2]_i_1__0 
        (.I0(reg_count_reg[1]),
         .I1(reg_count_reg[0]),
         .I2(Q[0]),
         .I3(i_rst_IBUF),
         .I4(reg_count_reg[2]),
-        .O(\reg_count[2]_i_1_n_0 ));
+        .O(\reg_count[2]_i_1__0_n_0 ));
   LUT6 #(
     .INIT(64'h0000007F00000080)) 
     \reg_count[3]_i_1 
@@ -344,7 +340,7 @@ module datapath
         .I3(Q[0]),
         .I4(i_rst_IBUF),
         .I5(reg_count_reg[3]),
-        .O(plusOp[3]));
+        .O(plusOp__0[3]));
   LUT6 #(
     .INIT(64'h00007FFF00008000)) 
     \reg_count[4]_i_1 
@@ -354,7 +350,7 @@ module datapath
         .I3(reg_count_reg[2]),
         .I4(\o_address_OBUF[7]_inst_i_2_n_0 ),
         .I5(reg_count_reg[4]),
-        .O(plusOp[4]));
+        .O(plusOp__0[4]));
   (* SOFT_HLUTNM = "soft_lutpair0" *) 
   LUT5 #(
     .INIT(32'hCCCDCCC2)) 
@@ -364,7 +360,7 @@ module datapath
         .I2(Q[0]),
         .I3(i_rst_IBUF),
         .I4(reg_count_reg[5]),
-        .O(plusOp[5]));
+        .O(plusOp__0[5]));
   LUT6 #(
     .INIT(64'hCCCCCCDFCCCCCC20)) 
     \reg_count[6]_i_1 
@@ -374,7 +370,7 @@ module datapath
         .I3(Q[0]),
         .I4(i_rst_IBUF),
         .I5(reg_count_reg[6]),
-        .O(plusOp[6]));
+        .O(plusOp__0[6]));
   LUT6 #(
     .INIT(64'h0000007F000000FF)) 
     \reg_count[6]_i_2 
@@ -390,7 +386,7 @@ module datapath
     \reg_count[7]_i_1 
        (.I0(Q[0]),
         .I1(Q[1]),
-        .I2(Q[8]),
+        .I2(Q[6]),
         .O(reg_count_load));
   LUT6 #(
     .INIT(64'hFFFA0006FFFA000A)) 
@@ -401,7 +397,7 @@ module datapath
         .I3(Q[0]),
         .I4(\reg_count[7]_i_3_n_0 ),
         .I5(reg_count_reg[5]),
-        .O(plusOp[7]));
+        .O(plusOp__0[7]));
   LUT6 #(
     .INIT(64'h00007FFF0000FFFF)) 
     \reg_count[7]_i_3 
@@ -418,7 +414,7 @@ module datapath
        (.C(CLK),
         .CE(reg_count_load),
         .CLR(i_rst_IBUF),
-        .D(\reg_count[0]_i_1_n_0 ),
+        .D(\reg_count[0]_i_1__0_n_0 ),
         .Q(reg_count_reg[0]));
   FDCE #(
     .INIT(1'b0)) 
@@ -426,7 +422,7 @@ module datapath
        (.C(CLK),
         .CE(reg_count_load),
         .CLR(i_rst_IBUF),
-        .D(\reg_count[1]_i_1_n_0 ),
+        .D(\reg_count[1]_i_1__0_n_0 ),
         .Q(reg_count_reg[1]));
   FDCE #(
     .INIT(1'b0)) 
@@ -434,7 +430,7 @@ module datapath
        (.C(CLK),
         .CE(reg_count_load),
         .CLR(i_rst_IBUF),
-        .D(\reg_count[2]_i_1_n_0 ),
+        .D(\reg_count[2]_i_1__0_n_0 ),
         .Q(reg_count_reg[2]));
   FDCE #(
     .INIT(1'b0)) 
@@ -442,7 +438,7 @@ module datapath
        (.C(CLK),
         .CE(reg_count_load),
         .CLR(i_rst_IBUF),
-        .D(plusOp[3]),
+        .D(plusOp__0[3]),
         .Q(reg_count_reg[3]));
   FDCE #(
     .INIT(1'b0)) 
@@ -450,7 +446,7 @@ module datapath
        (.C(CLK),
         .CE(reg_count_load),
         .CLR(i_rst_IBUF),
-        .D(plusOp[4]),
+        .D(plusOp__0[4]),
         .Q(reg_count_reg[4]));
   FDCE #(
     .INIT(1'b0)) 
@@ -458,7 +454,7 @@ module datapath
        (.C(CLK),
         .CE(reg_count_load),
         .CLR(i_rst_IBUF),
-        .D(plusOp[5]),
+        .D(plusOp__0[5]),
         .Q(reg_count_reg[5]));
   FDCE #(
     .INIT(1'b0)) 
@@ -466,7 +462,7 @@ module datapath
        (.C(CLK),
         .CE(reg_count_load),
         .CLR(i_rst_IBUF),
-        .D(plusOp[6]),
+        .D(plusOp__0[6]),
         .Q(reg_count_reg[6]));
   FDCE #(
     .INIT(1'b0)) 
@@ -474,136 +470,8 @@ module datapath
        (.C(CLK),
         .CE(reg_count_load),
         .CLR(i_rst_IBUF),
-        .D(plusOp[7]),
+        .D(plusOp__0[7]),
         .Q(reg_count_reg[7]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \reg_in_reg[0] 
-       (.C(CLK),
-        .CE(Q[4]),
-        .CLR(i_rst_IBUF),
-        .D(\reg_words_reg[7]_0 [0]),
-        .Q(reg_in[0]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \reg_in_reg[1] 
-       (.C(CLK),
-        .CE(Q[4]),
-        .CLR(i_rst_IBUF),
-        .D(\reg_words_reg[7]_0 [1]),
-        .Q(reg_in[1]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \reg_in_reg[2] 
-       (.C(CLK),
-        .CE(Q[4]),
-        .CLR(i_rst_IBUF),
-        .D(\reg_words_reg[7]_0 [2]),
-        .Q(reg_in[2]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \reg_in_reg[3] 
-       (.C(CLK),
-        .CE(Q[4]),
-        .CLR(i_rst_IBUF),
-        .D(\reg_words_reg[7]_0 [3]),
-        .Q(reg_in[3]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \reg_in_reg[4] 
-       (.C(CLK),
-        .CE(Q[4]),
-        .CLR(i_rst_IBUF),
-        .D(\reg_words_reg[7]_0 [4]),
-        .Q(reg_in[4]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \reg_in_reg[5] 
-       (.C(CLK),
-        .CE(Q[4]),
-        .CLR(i_rst_IBUF),
-        .D(\reg_words_reg[7]_0 [5]),
-        .Q(reg_in[5]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \reg_in_reg[6] 
-       (.C(CLK),
-        .CE(Q[4]),
-        .CLR(i_rst_IBUF),
-        .D(\reg_words_reg[7]_0 [6]),
-        .Q(reg_in[6]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \reg_in_reg[7] 
-       (.C(CLK),
-        .CE(Q[4]),
-        .CLR(i_rst_IBUF),
-        .D(\reg_words_reg[7]_0 [7]),
-        .Q(reg_in[7]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \reg_out_reg[0] 
-       (.C(CLK),
-        .CE(Q[5]),
-        .CLR(i_rst_IBUF),
-        .D(reg_in[0]),
-        .Q(\reg_out_reg[7]_0 [0]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \reg_out_reg[1] 
-       (.C(CLK),
-        .CE(Q[5]),
-        .CLR(i_rst_IBUF),
-        .D(reg_in[1]),
-        .Q(\reg_out_reg[7]_0 [1]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \reg_out_reg[2] 
-       (.C(CLK),
-        .CE(Q[5]),
-        .CLR(i_rst_IBUF),
-        .D(reg_in[2]),
-        .Q(\reg_out_reg[7]_0 [2]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \reg_out_reg[3] 
-       (.C(CLK),
-        .CE(Q[5]),
-        .CLR(i_rst_IBUF),
-        .D(reg_in[3]),
-        .Q(\reg_out_reg[7]_0 [3]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \reg_out_reg[4] 
-       (.C(CLK),
-        .CE(Q[5]),
-        .CLR(i_rst_IBUF),
-        .D(reg_in[4]),
-        .Q(\reg_out_reg[7]_0 [4]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \reg_out_reg[5] 
-       (.C(CLK),
-        .CE(Q[5]),
-        .CLR(i_rst_IBUF),
-        .D(reg_in[5]),
-        .Q(\reg_out_reg[7]_0 [5]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \reg_out_reg[6] 
-       (.C(CLK),
-        .CE(Q[5]),
-        .CLR(i_rst_IBUF),
-        .D(reg_in[6]),
-        .Q(\reg_out_reg[7]_0 [6]));
-  FDCE #(
-    .INIT(1'b0)) 
-    \reg_out_reg[7] 
-       (.C(CLK),
-        .CE(Q[5]),
-        .CLR(i_rst_IBUF),
-        .D(reg_in[7]),
-        .Q(\reg_out_reg[7]_0 [7]));
   FDCE #(
     .INIT(1'b0)) 
     \reg_words_reg[0] 
@@ -693,12 +561,15 @@ module project_reti_logiche
 
   wire DATAPATH0_n_10;
   wire DATAPATH0_n_11;
-  wire \FSM_onehot_cur_state[0]_i_1_n_0 ;
-  wire \FSM_onehot_cur_state[1]_i_1_n_0 ;
+  wire \FSM_onehot_cur_state[0]_i_1__0_n_0 ;
+  wire \FSM_onehot_cur_state[1]_i_1__0_n_0 ;
   wire \FSM_onehot_cur_state[3]_i_1_n_0 ;
   wire \FSM_onehot_cur_state_reg_n_0_[1] ;
   wire \FSM_onehot_cur_state_reg_n_0_[3] ;
+  wire \FSM_onehot_cur_state_reg_n_0_[6] ;
   wire \FSM_onehot_cur_state_reg_n_0_[9] ;
+  wire SERIALIZER0_n_0;
+  wire SERIALIZER0_n_1;
   wire i_clk;
   wire i_clk_IBUF;
   wire i_clk_IBUF_BUFG;
@@ -714,7 +585,6 @@ module project_reti_logiche
   wire [10:0]o_address_OBUF;
   wire \o_address_OBUF[10]_inst_i_3_n_0 ;
   wire [7:0]o_data;
-  wire [7:0]o_data_OBUF;
   wire o_done;
   wire o_done_OBUF;
   wire o_en;
@@ -722,57 +592,55 @@ module project_reti_logiche
   wire o_we;
   wire o_we_OBUF;
   wire reg_in_load;
-  wire reg_out_load;
   wire reg_words_load;
 
   datapath DATAPATH0
        (.CLK(i_clk_IBUF_BUFG),
         .D({DATAPATH0_n_10,DATAPATH0_n_11}),
-        .Q({\FSM_onehot_cur_state_reg_n_0_[9] ,mux_rw_addr_sel,reg_out_load,reg_in_load,o_done_OBUF,\FSM_onehot_cur_state_reg_n_0_[3] ,reg_words_load,mux_count_rst}),
+        .Q({\FSM_onehot_cur_state_reg_n_0_[9] ,mux_rw_addr_sel,o_done_OBUF,\FSM_onehot_cur_state_reg_n_0_[3] ,reg_words_load,mux_count_rst}),
         .i_rst_IBUF(i_rst_IBUF),
         .i_start_IBUF(i_start_IBUF),
         .\o_address[2] (\o_address_OBUF[10]_inst_i_3_n_0 ),
         .o_address_OBUF({o_address_OBUF[10],o_address_OBUF[8:0]}),
-        .\reg_out_reg[7]_0 (o_data_OBUF),
         .\reg_words_reg[7]_0 (i_data_IBUF));
   LUT3 #(
     .INIT(8'h0E)) 
-    \FSM_onehot_cur_state[0]_i_1 
+    \FSM_onehot_cur_state[0]_i_1__0 
        (.I0(o_done_OBUF),
         .I1(mux_count_rst),
         .I2(i_start_IBUF),
-        .O(\FSM_onehot_cur_state[0]_i_1_n_0 ));
+        .O(\FSM_onehot_cur_state[0]_i_1__0_n_0 ));
   LUT2 #(
     .INIT(4'h8)) 
-    \FSM_onehot_cur_state[1]_i_1 
+    \FSM_onehot_cur_state[1]_i_1__0 
        (.I0(mux_count_rst),
         .I1(i_start_IBUF),
-        .O(\FSM_onehot_cur_state[1]_i_1_n_0 ));
+        .O(\FSM_onehot_cur_state[1]_i_1__0_n_0 ));
   LUT2 #(
     .INIT(4'hE)) 
     \FSM_onehot_cur_state[3]_i_1 
        (.I0(\FSM_onehot_cur_state_reg_n_0_[9] ),
         .I1(reg_words_load),
         .O(\FSM_onehot_cur_state[3]_i_1_n_0 ));
-  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,parallelize_debug:0001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,serialize_debug:0001000000" *) 
   FDPE #(
     .INIT(1'b1)) 
     \FSM_onehot_cur_state_reg[0] 
        (.C(i_clk_IBUF_BUFG),
         .CE(1'b1),
-        .D(\FSM_onehot_cur_state[0]_i_1_n_0 ),
+        .D(\FSM_onehot_cur_state[0]_i_1__0_n_0 ),
         .PRE(i_rst_IBUF),
         .Q(mux_count_rst));
-  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,parallelize_debug:0001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,serialize_debug:0001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[1] 
        (.C(i_clk_IBUF_BUFG),
         .CE(1'b1),
         .CLR(i_rst_IBUF),
-        .D(\FSM_onehot_cur_state[1]_i_1_n_0 ),
+        .D(\FSM_onehot_cur_state[1]_i_1__0_n_0 ),
         .Q(\FSM_onehot_cur_state_reg_n_0_[1] ));
-  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,parallelize_debug:0001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,serialize_debug:0001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[2] 
@@ -781,7 +649,7 @@ module project_reti_logiche
         .CLR(i_rst_IBUF),
         .D(\FSM_onehot_cur_state_reg_n_0_[1] ),
         .Q(reg_words_load));
-  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,parallelize_debug:0001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,serialize_debug:0001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[3] 
@@ -790,7 +658,7 @@ module project_reti_logiche
         .CLR(i_rst_IBUF),
         .D(\FSM_onehot_cur_state[3]_i_1_n_0 ),
         .Q(\FSM_onehot_cur_state_reg_n_0_[3] ));
-  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,parallelize_debug:0001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,serialize_debug:0001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[4] 
@@ -799,7 +667,7 @@ module project_reti_logiche
         .CLR(i_rst_IBUF),
         .D(DATAPATH0_n_11),
         .Q(o_done_OBUF));
-  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,parallelize_debug:0001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,serialize_debug:0001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[5] 
@@ -808,25 +676,25 @@ module project_reti_logiche
         .CLR(i_rst_IBUF),
         .D(DATAPATH0_n_10),
         .Q(reg_in_load));
-  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,parallelize_debug:0001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,serialize_debug:0001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[6] 
        (.C(i_clk_IBUF_BUFG),
         .CE(1'b1),
         .CLR(i_rst_IBUF),
-        .D(reg_in_load),
-        .Q(reg_out_load));
-  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,parallelize_debug:0001000000" *) 
+        .D(SERIALIZER0_n_1),
+        .Q(\FSM_onehot_cur_state_reg_n_0_[6] ));
+  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,serialize_debug:0001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[7] 
        (.C(i_clk_IBUF_BUFG),
         .CE(1'b1),
         .CLR(i_rst_IBUF),
-        .D(reg_out_load),
+        .D(SERIALIZER0_n_0),
         .Q(mux_rw_addr_sel[0]));
-  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,parallelize_debug:0001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,serialize_debug:0001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[8] 
@@ -835,7 +703,7 @@ module project_reti_logiche
         .CLR(i_rst_IBUF),
         .D(mux_rw_addr_sel[0]),
         .Q(mux_rw_addr_sel[1]));
-  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,parallelize_debug:0001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:0000100000,read_ram_request:0000001000,read_words_ram_read:0000000100,read_words_ram_request:0000000010,reset:0000000001,done:0000010000,write_ram_2:0100000000,write_ram_wait:1000000000,write_ram_1:0010000000,serialize_debug:0001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[9] 
@@ -844,6 +712,11 @@ module project_reti_logiche
         .CLR(i_rst_IBUF),
         .D(mux_rw_addr_sel[1]),
         .Q(\FSM_onehot_cur_state_reg_n_0_[9] ));
+  serializer SERIALIZER0
+       (.CLK(i_clk_IBUF_BUFG),
+        .D({SERIALIZER0_n_0,SERIALIZER0_n_1}),
+        .Q({\FSM_onehot_cur_state_reg_n_0_[6] ,reg_in_load}),
+        .i_rst_IBUF(i_rst_IBUF));
   BUFG i_clk_IBUF_BUFG_inst
        (.I(i_clk_IBUF),
         .O(i_clk_IBUF_BUFG));
@@ -936,28 +809,28 @@ module project_reti_logiche
        (.I(o_address_OBUF[8]),
         .O(o_address[9]));
   OBUF \o_data_OBUF[0]_inst 
-       (.I(o_data_OBUF[0]),
+       (.I(1'b0),
         .O(o_data[0]));
   OBUF \o_data_OBUF[1]_inst 
-       (.I(o_data_OBUF[1]),
+       (.I(1'b0),
         .O(o_data[1]));
   OBUF \o_data_OBUF[2]_inst 
-       (.I(o_data_OBUF[2]),
+       (.I(1'b0),
         .O(o_data[2]));
   OBUF \o_data_OBUF[3]_inst 
-       (.I(o_data_OBUF[3]),
+       (.I(1'b0),
         .O(o_data[3]));
   OBUF \o_data_OBUF[4]_inst 
-       (.I(o_data_OBUF[4]),
+       (.I(1'b0),
         .O(o_data[4]));
   OBUF \o_data_OBUF[5]_inst 
-       (.I(o_data_OBUF[5]),
+       (.I(1'b0),
         .O(o_data[5]));
   OBUF \o_data_OBUF[6]_inst 
-       (.I(o_data_OBUF[6]),
+       (.I(1'b0),
         .O(o_data[6]));
   OBUF \o_data_OBUF[7]_inst 
-       (.I(o_data_OBUF[7]),
+       (.I(1'b0),
         .O(o_data[7]));
   OBUF o_done_OBUF_inst
        (.I(o_done_OBUF),
@@ -965,7 +838,7 @@ module project_reti_logiche
   OBUF o_en_OBUF_inst
        (.I(o_en_OBUF),
         .O(o_en));
-  (* SOFT_HLUTNM = "soft_lutpair4" *) 
+  (* SOFT_HLUTNM = "soft_lutpair6" *) 
   LUT4 #(
     .INIT(16'hFFFE)) 
     o_en_OBUF_inst_i_1
@@ -977,13 +850,150 @@ module project_reti_logiche
   OBUF o_we_OBUF_inst
        (.I(o_we_OBUF),
         .O(o_we));
-  (* SOFT_HLUTNM = "soft_lutpair4" *) 
+  (* SOFT_HLUTNM = "soft_lutpair6" *) 
   LUT2 #(
     .INIT(4'hE)) 
     o_we_OBUF_inst_i_1
        (.I0(mux_rw_addr_sel[1]),
         .I1(mux_rw_addr_sel[0]),
         .O(o_we_OBUF));
+endmodule
+
+module serializer
+   (D,
+    i_rst_IBUF,
+    Q,
+    CLK);
+  output [1:0]D;
+  input i_rst_IBUF;
+  input [1:0]Q;
+  input CLK;
+
+  wire CLK;
+  wire [1:0]D;
+  wire \FSM_onehot_cur_state[0]_i_1_n_0 ;
+  wire \FSM_onehot_cur_state[1]_i_1_n_0 ;
+  wire \FSM_onehot_cur_state_reg_n_0_[1] ;
+  wire [1:0]Q;
+  wire i_rst_IBUF;
+  wire [2:0]plusOp;
+  wire [2:0]reg_count;
+  wire \reg_count[2]_i_2_n_0 ;
+  wire reg_count_load;
+  wire ser_done;
+
+  LUT6 #(
+    .INIT(64'h8000FFFF80008000)) 
+    \FSM_onehot_cur_state[0]_i_1 
+       (.I0(reg_count[2]),
+        .I1(reg_count[1]),
+        .I2(reg_count[0]),
+        .I3(reg_count_load),
+        .I4(Q[0]),
+        .I5(ser_done),
+        .O(\FSM_onehot_cur_state[0]_i_1_n_0 ));
+  LUT6 #(
+    .INIT(64'hFFFF7F007F007F00)) 
+    \FSM_onehot_cur_state[1]_i_1 
+       (.I0(reg_count[2]),
+        .I1(reg_count[1]),
+        .I2(reg_count[0]),
+        .I3(reg_count_load),
+        .I4(ser_done),
+        .I5(Q[0]),
+        .O(\FSM_onehot_cur_state[1]_i_1_n_0 ));
+  (* SOFT_HLUTNM = "soft_lutpair5" *) 
+  LUT3 #(
+    .INIT(8'hBA)) 
+    \FSM_onehot_cur_state[6]_i_1 
+       (.I0(Q[0]),
+        .I1(ser_done),
+        .I2(Q[1]),
+        .O(D[0]));
+  (* SOFT_HLUTNM = "soft_lutpair5" *) 
+  LUT2 #(
+    .INIT(4'h8)) 
+    \FSM_onehot_cur_state[7]_i_1 
+       (.I0(ser_done),
+        .I1(Q[1]),
+        .O(D[1]));
+  (* FSM_ENCODED_STATES = "active_out2:100,stopped:001,active_out1:010" *) 
+  FDPE #(
+    .INIT(1'b1)) 
+    \FSM_onehot_cur_state_reg[0] 
+       (.C(CLK),
+        .CE(1'b1),
+        .D(\FSM_onehot_cur_state[0]_i_1_n_0 ),
+        .PRE(i_rst_IBUF),
+        .Q(ser_done));
+  (* FSM_ENCODED_STATES = "active_out2:100,stopped:001,active_out1:010" *) 
+  FDCE #(
+    .INIT(1'b0)) 
+    \FSM_onehot_cur_state_reg[1] 
+       (.C(CLK),
+        .CE(1'b1),
+        .CLR(i_rst_IBUF),
+        .D(\FSM_onehot_cur_state[1]_i_1_n_0 ),
+        .Q(\FSM_onehot_cur_state_reg_n_0_[1] ));
+  (* FSM_ENCODED_STATES = "active_out2:100,stopped:001,active_out1:010" *) 
+  FDCE #(
+    .INIT(1'b0)) 
+    \FSM_onehot_cur_state_reg[2] 
+       (.C(CLK),
+        .CE(1'b1),
+        .CLR(i_rst_IBUF),
+        .D(\FSM_onehot_cur_state_reg_n_0_[1] ),
+        .Q(reg_count_load));
+  LUT1 #(
+    .INIT(2'h1)) 
+    \reg_count[0]_i_1 
+       (.I0(reg_count[0]),
+        .O(plusOp[0]));
+  (* SOFT_HLUTNM = "soft_lutpair4" *) 
+  LUT2 #(
+    .INIT(4'h6)) 
+    \reg_count[1]_i_1 
+       (.I0(reg_count[0]),
+        .I1(reg_count[1]),
+        .O(plusOp[1]));
+  (* SOFT_HLUTNM = "soft_lutpair4" *) 
+  LUT3 #(
+    .INIT(8'h6A)) 
+    \reg_count[2]_i_1 
+       (.I0(reg_count[2]),
+        .I1(reg_count[1]),
+        .I2(reg_count[0]),
+        .O(plusOp[2]));
+  LUT2 #(
+    .INIT(4'hE)) 
+    \reg_count[2]_i_2 
+       (.I0(i_rst_IBUF),
+        .I1(Q[0]),
+        .O(\reg_count[2]_i_2_n_0 ));
+  FDCE #(
+    .INIT(1'b0)) 
+    \reg_count_reg[0] 
+       (.C(CLK),
+        .CE(reg_count_load),
+        .CLR(\reg_count[2]_i_2_n_0 ),
+        .D(plusOp[0]),
+        .Q(reg_count[0]));
+  FDCE #(
+    .INIT(1'b0)) 
+    \reg_count_reg[1] 
+       (.C(CLK),
+        .CE(reg_count_load),
+        .CLR(\reg_count[2]_i_2_n_0 ),
+        .D(plusOp[1]),
+        .Q(reg_count[1]));
+  FDCE #(
+    .INIT(1'b0)) 
+    \reg_count_reg[2] 
+       (.C(CLK),
+        .CE(reg_count_load),
+        .CLR(\reg_count[2]_i_2_n_0 ),
+        .D(plusOp[2]),
+        .Q(reg_count[2]));
 endmodule
 `ifndef GLBL
 `define GLBL

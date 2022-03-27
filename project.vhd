@@ -21,19 +21,34 @@ architecture behavioral of project_reti_logiche is
     component datapath
     port(
         -- global signals
+        i_clk           : in  std_logic;
+        i_rst           : in  std_logic;
+        i_data          : in  std_logic_vector(7 downto 0);
+        o_address       : out std_logic_vector(15 downto 0);
+        o_done_signal   : out std_logic;
+        o_data          : out std_logic_vector(7 downto 0);
+        --control signals from the FSM
+        reg_in_load     : in std_logic;
+        reg_out_load    : in std_logic;
+        reg_words_load  : in std_logic;
+        reg_count_load  : in std_logic;
+        mux_count_rst   : in std_logic;
+        mux_rw_addr_sel : in std_logic_vector(1 downto 0);
+        
+        to_ser_input : out std_logic_vector(7 downto 0);
+        from_ser_output : in std_logic
+    );
+    end component;
+    
+    component serializer is
+    port (
         i_clk         : in  std_logic;
         i_rst         : in  std_logic;
-        i_data        : in  std_logic_vector(7 downto 0);
-        o_address     : out std_logic_vector(15 downto 0);
-        o_done_signal : out std_logic;
-        o_data        : out std_logic_vector(7 downto 0);
-        --control signals from the FSM
-        reg_in_load : in std_logic;
-        reg_out_load : in std_logic;
-        reg_words_load : in std_logic;
-        reg_count_load : in std_logic;
-        mux_count_rst : in std_logic;
-        mux_rw_addr_sel : in std_logic_vector(1 downto 0)
+        ser_start     : in  std_logic;
+        ser_done      : out std_logic;
+        
+        ser_input     : in std_logic_vector(7 downto 0);
+        ser_output    : out std_logic        
     );
     end component;
             
@@ -46,7 +61,7 @@ architecture behavioral of project_reti_logiche is
         READ_RAM_REQUEST,
         READ_RAM,
         
-        PARALLELIZE_DEBUG,
+        SERIALIZE_DEBUG,
         
         WRITE_RAM_1,
         WRITE_RAM_2,
@@ -68,6 +83,14 @@ architecture behavioral of project_reti_logiche is
     signal mux_count_rst : std_logic;
     signal mux_rw_addr_sel : std_logic_vector(1 downto 0);
     
+    -- Serializer control signals
+    signal ser_start : std_logic;
+    signal ser_done : std_logic;
+    -- Serializer data signals (Passed to the datapath)
+    signal ser_input : std_logic_vector(7 downto 0);
+    signal ser_output : std_logic;
+    
+    -- Done signal from datapath
     signal o_done_signal : std_logic;
     
     
@@ -86,7 +109,19 @@ begin
         reg_words_load,
         reg_count_load,
         mux_count_rst,
-        mux_rw_addr_sel
+        mux_rw_addr_sel,
+        
+        ser_input,
+        ser_output
+    );
+    
+    SERIALIZER0 : serializer port map( -- TODO
+        i_clk => i_clk,
+        i_rst => i_rst,
+        ser_start => ser_start,
+        ser_done => ser_done,
+        ser_input => ser_input, -- input and output ports are connected to the datapath
+        ser_output => ser_output  -- WARNING: if i add a component at the datapath is another one istantiated or is this one (probabily another so don't work)
     );
     
     FSM_STATE_CHANGE : process(i_clk, i_rst)
@@ -98,7 +133,7 @@ begin
         end if;
     end process;
     
-    FSM_FLOW : process(cur_state, i_start, i_data, o_done_signal)
+    FSM_FLOW : process(cur_state, i_start, i_data, o_done_signal, ser_done)
     begin
         next_state <= cur_state; -- avoiding latches: default assign
         case cur_state is
@@ -123,13 +158,16 @@ begin
                 end if;
                 
             when READ_RAM =>
-                next_state <= PARALLELIZE_DEBUG;
+                next_state <= SERIALIZE_DEBUG;
             
             
-            when PARALLELIZE_DEBUG =>
-                next_state <= WRITE_RAM_1;
-            
-            
+            when SERIALIZE_DEBUG =>
+                if ser_done = '0' then 
+                    next_state <= SERIALIZE_DEBUG;
+                else 
+                    next_state <= WRITE_RAM_1;
+                end if;
+                
             when WRITE_RAM_1 =>
                 next_state <= WRITE_RAM_2;
             when WRITE_RAM_2 =>
@@ -160,6 +198,7 @@ begin
         reg_count_load <= '0';
         mux_count_rst <= '0';
         mux_rw_addr_sel <= "00";
+        ser_start <= '0';
         
         -- o_address <= "0000000000000000";
         o_en <= '0';
@@ -186,10 +225,10 @@ begin
                 
             when READ_RAM =>
                 reg_in_load <= '1';
+                ser_start <= '1';
             
-            
-            when PARALLELIZE_DEBUG =>
-                reg_out_load <= '1';
+            when SERIALIZE_DEBUG =>
+                -- reg_out_load <= '';
         
         
             when WRITE_RAM_1 =>
@@ -255,7 +294,10 @@ entity datapath is
         reg_words_load : in std_logic;
         reg_count_load : in std_logic;
         mux_count_rst : in std_logic;
-        mux_rw_addr_sel : in std_logic_vector(1 downto 0)
+        mux_rw_addr_sel : in std_logic_vector(1 downto 0);
+        --signals datapath
+        to_ser_input : out std_logic_vector(7 downto 0);
+        from_ser_output : in std_logic
     );
 end datapath;
 
@@ -281,16 +323,19 @@ begin
         end if;
     end process;
     
+    to_ser_input <= reg_in;
+    
     REG_OUT_PROCESS : process(i_clk, i_rst)
     begin
         if i_rst = '1' then
             reg_out <= "00000000";
         elsif i_clk'event and i_clk = '1' then
             if reg_out_load = '1' then
-                reg_out <= reg_in;
+                reg_out <= from_ser_output & "0000000";
             end if;
         end if;
     end process;
+    
     
     o_data <= reg_out;
     
@@ -353,6 +398,11 @@ end architecture behavioral;
 
 
 
+
+
+
+
+
 -- SERIALIZER
 
 library ieee;
@@ -367,7 +417,7 @@ entity serializer is
         ser_start     : in  std_logic;
         ser_done      : out std_logic;
         
-        ser_input     : in std_logic_vector(7 downto 0);
+        ser_input     : in std_logic_vector(0 to 7); -- al contrario count incrementa e il primo da leggere è il MSB
         ser_output    : out std_logic        
     );
 end entity;
