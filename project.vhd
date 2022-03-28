@@ -36,7 +36,11 @@ architecture behavioral of project_reti_logiche is
         mux_rw_addr_sel : in std_logic_vector(1 downto 0);
         
         to_ser_input : out std_logic_vector(7 downto 0);
-        from_ser_output : in std_logic
+        from_ser_output : in std_logic;
+        
+        --datapath signals of convolutor 
+        to_conv_input : out std_logic;
+        from_conv_output : in std_logic
     );
     end component;
     
@@ -49,6 +53,17 @@ architecture behavioral of project_reti_logiche is
         
         ser_input     : in std_logic_vector(7 downto 0);
         ser_output    : out std_logic        
+    );
+    end component;
+    
+    component convolutor is
+    port (
+        i_clk         : in  std_logic;
+        i_rst         : in  std_logic;
+        conv_reset    : in  std_logic;
+        conv_pause    : in  std_logic;
+        conv_input     : in std_logic; 
+        conv_output    : out std_logic        
     );
     end component;
             
@@ -89,6 +104,13 @@ architecture behavioral of project_reti_logiche is
     -- Serializer data signals (Passed to the datapath)
     signal ser_input : std_logic_vector(7 downto 0);
     signal ser_output : std_logic;
+    -- Convolutor control signals
+    signal conv_reset : std_logic;
+    signal conv_pause : std_logic;
+    -- Convolutor data signals
+    signal conv_input : std_logic;
+    signal conv_output : std_logic;
+    
     
     -- Done signal from datapath
     signal o_done_signal : std_logic;
@@ -112,7 +134,10 @@ begin
         mux_rw_addr_sel,
         
         ser_input,
-        ser_output
+        ser_output,
+        
+        conv_input,
+        conv_output
     );
     
     SERIALIZER0 : serializer port map( -- TODO
@@ -123,6 +148,16 @@ begin
         ser_input => ser_input, -- input and output ports are connected to the datapath
         ser_output => ser_output  -- WARNING: if i add a component at the datapath is another one istantiated or is this one (probabily another so don't work)
     );
+    
+    CONVOLUTOR0 : convolutor port map(
+        i_clk,
+        i_rst,
+        conv_reset,
+        ser_done, -- Passing directly ser_done as when the serialized has stopped fsm must be paused
+        conv_input,
+        conv_output
+    );
+    
     
     FSM_STATE_CHANGE : process(i_clk, i_rst)
     begin
@@ -199,6 +234,7 @@ begin
         mux_count_rst <= '0';
         mux_rw_addr_sel <= "00";
         ser_start <= '0';
+        conv_reset <= '0';
         
         -- o_address <= "0000000000000000";
         o_en <= '0';
@@ -209,6 +245,7 @@ begin
             when RESET =>
                 mux_count_rst <= '1'; -- load 0 into the reg_count to read ...
                 reg_count_load <= '1'; -- address [0]
+                conv_reset <= '1';
                 
             when READ_WORDS_RAM_REQUEST =>
                 mux_rw_addr_sel <= "00";
@@ -295,9 +332,12 @@ entity datapath is
         reg_count_load : in std_logic;
         mux_count_rst : in std_logic;
         mux_rw_addr_sel : in std_logic_vector(1 downto 0);
-        --signals datapath
+        --datapath signals of serializer
         to_ser_input : out std_logic_vector(7 downto 0);
-        from_ser_output : in std_logic
+        from_ser_output : in std_logic;
+        --datapath signals of convolutor 
+        to_conv_input : out std_logic;
+        from_conv_output : in std_logic
     );
 end datapath;
 
@@ -325,13 +365,15 @@ begin
     
     to_ser_input <= reg_in;
     
+    to_conv_input <= from_ser_output;
+    
     REG_OUT_PROCESS : process(i_clk, i_rst)
     begin
         if i_rst = '1' then
             reg_out <= "00000000";
         elsif i_clk'event and i_clk = '1' then
             if reg_out_load = '1' then
-                reg_out <= from_ser_output & "0000000";
+                reg_out <= from_conv_output & "0000000";
             end if;
         end if;
     end process;
@@ -531,7 +573,6 @@ end entity;
 architecture behavioral of convolutor is
 
     type conv_state is ( -- the states are written with capital letter o and i
-        RESET,
         OO_PK1,
         OO_PK2,
         OI_PK1,
@@ -550,7 +591,7 @@ begin
     FSM_STATE_CHANGE : process(i_clk, i_rst, conv_reset)
     begin
         if i_rst = '1' or conv_reset = '1' then
-            cur_state <= RESET;
+            cur_state <= OO_PK1;
         elsif i_clk'EVENT and i_clk = '1' then
             cur_state <= next_state;
         end if;
@@ -563,8 +604,6 @@ begin
         else 
             next_state <= cur_state;
             case cur_state is
-                when RESET =>
-                    next_state <= OO_PK1;
                     
                 when OO_PK1 => 
                     next_state <= OO_PK2;
@@ -610,8 +649,7 @@ begin
     FSM_OUT : process(cur_state, conv_input)
     begin
         conv_output <= '0';
-        case cur_state is        
-            when RESET =>
+        case cur_state is
             
             when OO_PK1 =>
                 if conv_input <= '0' then

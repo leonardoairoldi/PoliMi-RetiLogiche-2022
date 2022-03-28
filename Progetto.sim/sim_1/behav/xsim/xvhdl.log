@@ -2,3 +2,4 @@ INFO: [VRFC 10-163] Analyzing VHDL file "D:/dev/reti-logiche-2022/project.vhd" i
 INFO: [VRFC 10-3107] analyzing entity 'project_reti_logiche'
 INFO: [VRFC 10-3107] analyzing entity 'datapath'
 INFO: [VRFC 10-3107] analyzing entity 'serializer'
+INFO: [VRFC 10-3107] analyzing entity 'convolutor'
