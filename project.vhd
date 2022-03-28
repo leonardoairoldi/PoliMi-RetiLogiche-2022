@@ -499,3 +499,177 @@ begin
     ser_output <= ser_input(conv_integer(reg_count));
 
 end architecture;
+
+
+
+
+
+
+
+
+
+
+
+-- CONVOLUTOR FSM
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use ieee.std_logic_unsigned.all;
+
+entity convolutor is
+    port (
+        i_clk         : in  std_logic;
+        i_rst         : in  std_logic;
+        conv_reset    : in  std_logic;
+        conv_pause    : in  std_logic;
+        conv_input     : in std_logic; 
+        conv_output    : out std_logic        
+    );
+end entity;
+
+architecture behavioral of convolutor is
+
+    type conv_state is ( -- the states are written with capital letter o and i
+        RESET,
+        OO_PK1,
+        OO_PK2,
+        OI_PK1,
+        OI_PK2,
+        IO_PK1,
+        IO_PK2,
+        II_PK1,
+        II_PK2
+    );
+    
+    signal cur_state : conv_state;
+    signal next_state : conv_state;  
+    
+begin 
+
+    FSM_STATE_CHANGE : process(i_clk, i_rst, conv_reset)
+    begin
+        if i_rst = '1' or conv_reset = '1' then
+            cur_state <= RESET;
+        elsif i_clk'EVENT and i_clk = '1' then
+            cur_state <= next_state;
+        end if;
+    end process;
+    
+    FSM_FLOW : process(cur_state, conv_input, conv_pause)
+    begin
+        if conv_pause = '1' then
+            next_state <= cur_state;
+        else 
+            next_state <= cur_state;
+            case cur_state is
+                when RESET =>
+                    next_state <= OO_PK1;
+                    
+                when OO_PK1 => 
+                    next_state <= OO_PK2;
+                when OO_PK2 =>
+                    if conv_input = '0' then
+                        next_state <= OO_PK1;
+                    else 
+                        next_state <= IO_PK1;
+                    end if;
+                
+                    
+                when OI_PK1 => 
+                    next_state <= OI_PK2;
+                when OI_PK2 =>
+                    if conv_input = '0' then
+                        next_state <= OO_PK1;
+                    else 
+                        next_state <= IO_PK1;
+                    end if;
+                    
+                when IO_PK1 => 
+                    next_state <= IO_PK2;
+                when IO_PK2 =>
+                    if conv_input = '0' then
+                        next_state <= OI_PK1;
+                    else 
+                        next_state <= II_PK1;
+                    end if;
+                    
+                when II_PK1 => 
+                    next_state <= II_PK2;
+                when II_PK2 =>
+                if conv_input = '0' then
+                        next_state <= OI_PK1;
+                    else 
+                        next_state <= II_PK1;
+                    end if;
+                    
+            end case;    
+        end if;
+    end process;
+    
+    FSM_OUT : process(cur_state, conv_input)
+    begin
+        conv_output <= '0';
+        case cur_state is        
+            when RESET =>
+            
+            when OO_PK1 =>
+                if conv_input <= '0' then
+                    conv_output <= '0';
+                else
+                    conv_output <= '1';
+                end if;
+            
+            when OO_PK2 =>
+                if conv_input <= '0' then
+                    conv_output <= '0';
+                else
+                    conv_output <= '1';
+                end if;
+            
+            when OI_PK1 =>
+                if conv_input <= '0' then
+                    conv_output <= '1';
+                else
+                    conv_output <= '0';
+                end if;
+            
+            when OI_PK2 =>
+                if conv_input <= '0' then
+                    conv_output <= '1';
+                else
+                    conv_output <= '0';
+                end if;
+            
+            when IO_PK1 =>
+                if conv_input <= '0' then
+                    conv_output <= '0';
+                else
+                    conv_output <= '1';
+                end if;
+            
+            when IO_PK2 =>
+                if conv_input <= '0' then
+                    conv_output <= '1';
+                else
+                    conv_output <= '0';
+                end if;
+                
+            when II_PK1 =>
+                if conv_input <= '0' then
+                    conv_output <= '1';
+                else
+                    conv_output <= '0';
+                end if;
+            
+            when II_PK2 =>
+                if conv_input <= '0' then
+                    conv_output <= '0';
+                else
+                    conv_output <= '1';
+                end if;
+        end case;
+    end process;
+    
+    
+end architecture;
