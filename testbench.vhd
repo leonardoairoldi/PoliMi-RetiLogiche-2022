@@ -28,7 +28,7 @@ signal RAM: ram_type := (0 => std_logic_vector(to_unsigned(  2  , 8)),
 			 -- Expected Output  1000 -> 209                         
 			 -- Expected Output  1001 -> 205                         
 			 -- Expected Output  1002 -> 247                         
-			 -- Expected Output  1003 -> 201                         
+			 -- Expected Output  1003 -> 210                         
 
 component project_reti_logiche is
 port (

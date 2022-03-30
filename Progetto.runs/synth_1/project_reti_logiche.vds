@@ -2,8 +2,8 @@
 # Vivado v2021.1 (64-bit)
 # SW Build 3247384 on Thu Jun 10 19:36:33 MDT 2021
 # IP Build 3246043 on Fri Jun 11 00:30:35 MDT 2021
-# Start of session at: Mon Mar 28 17:00:17 2022
-# Process ID: 49488
+# Start of session at: Wed Mar 30 18:53:59 2022
+# Process ID: 41908
 # Current directory: D:/dev/reti-logiche-2022/Progetto.runs/synth_1
 # Command line: vivado.exe -log project_reti_logiche.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source project_reti_logiche.tcl
 # Log file: D:/dev/reti-logiche-2022/Progetto.runs/synth_1/project_reti_logiche.vds
@@ -17,34 +17,37 @@ INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a200
 INFO: [Device 21-403] Loading part xc7a200tfbg484-1
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 15304
+INFO: [Synth 8-7075] Helper process launched with PID 4036
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1144.172 ; gain = 0.000
+Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1143.781 ; gain = 0.000
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-638] synthesizing module 'project_reti_logiche' [D:/dev/reti-logiche-2022/project.vhd:20]
-INFO: [Synth 8-3491] module 'datapath' declared at 'D:/dev/reti-logiche-2022/project.vhd:319' bound to instance 'DATAPATH0' of component 'datapath' [D:/dev/reti-logiche-2022/project.vhd:121]
-INFO: [Synth 8-638] synthesizing module 'datapath' [D:/dev/reti-logiche-2022/project.vhd:344]
-INFO: [Synth 8-256] done synthesizing module 'datapath' (1#1) [D:/dev/reti-logiche-2022/project.vhd:344]
-INFO: [Synth 8-3491] module 'serializer' declared at 'D:/dev/reti-logiche-2022/project.vhd:455' bound to instance 'SERIALIZER0' of component 'serializer' [D:/dev/reti-logiche-2022/project.vhd:143]
-INFO: [Synth 8-638] synthesizing module 'serializer' [D:/dev/reti-logiche-2022/project.vhd:468]
-INFO: [Synth 8-256] done synthesizing module 'serializer' (2#1) [D:/dev/reti-logiche-2022/project.vhd:468]
-INFO: [Synth 8-3491] module 'convolutor' declared at 'D:/dev/reti-logiche-2022/project.vhd:562' bound to instance 'CONVOLUTOR0' of component 'convolutor' [D:/dev/reti-logiche-2022/project.vhd:152]
-INFO: [Synth 8-638] synthesizing module 'convolutor' [D:/dev/reti-logiche-2022/project.vhd:573]
-INFO: [Synth 8-256] done synthesizing module 'convolutor' (3#1) [D:/dev/reti-logiche-2022/project.vhd:573]
-INFO: [Synth 8-256] done synthesizing module 'project_reti_logiche' (4#1) [D:/dev/reti-logiche-2022/project.vhd:20]
+INFO: [Synth 8-3491] module 'datapath' declared at 'D:/dev/reti-logiche-2022/project.vhd:363' bound to instance 'DATAPATH0' of component 'datapath' [D:/dev/reti-logiche-2022/project.vhd:144]
+INFO: [Synth 8-638] synthesizing module 'datapath' [D:/dev/reti-logiche-2022/project.vhd:391]
+INFO: [Synth 8-256] done synthesizing module 'datapath' (1#1) [D:/dev/reti-logiche-2022/project.vhd:391]
+INFO: [Synth 8-3491] module 'serializer' declared at 'D:/dev/reti-logiche-2022/project.vhd:504' bound to instance 'SERIALIZER0' of component 'serializer' [D:/dev/reti-logiche-2022/project.vhd:169]
+INFO: [Synth 8-638] synthesizing module 'serializer' [D:/dev/reti-logiche-2022/project.vhd:517]
+INFO: [Synth 8-256] done synthesizing module 'serializer' (2#1) [D:/dev/reti-logiche-2022/project.vhd:517]
+INFO: [Synth 8-3491] module 'convolutor' declared at 'D:/dev/reti-logiche-2022/project.vhd:730' bound to instance 'CONVOLUTOR0' of component 'convolutor' [D:/dev/reti-logiche-2022/project.vhd:178]
+INFO: [Synth 8-638] synthesizing module 'convolutor' [D:/dev/reti-logiche-2022/project.vhd:741]
+INFO: [Synth 8-256] done synthesizing module 'convolutor' (3#1) [D:/dev/reti-logiche-2022/project.vhd:741]
+INFO: [Synth 8-3491] module 'parallelizer' declared at 'D:/dev/reti-logiche-2022/project.vhd:611' bound to instance 'PARALLELIZER0' of component 'parallelizer' [D:/dev/reti-logiche-2022/project.vhd:187]
+INFO: [Synth 8-638] synthesizing module 'parallelizer' [D:/dev/reti-logiche-2022/project.vhd:624]
+INFO: [Synth 8-256] done synthesizing module 'parallelizer' (4#1) [D:/dev/reti-logiche-2022/project.vhd:624]
+INFO: [Synth 8-256] done synthesizing module 'project_reti_logiche' (5#1) [D:/dev/reti-logiche-2022/project.vhd:20]
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 1144.172 ; gain = 0.000
+Finished RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 1143.781 ; gain = 0.000
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1144.172 ; gain = 0.000
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1143.781 ; gain = 0.000
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1144.172 ; gain = 0.000
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 1143.781 ; gain = 0.000
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1144.172 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1143.781 ; gain = 0.000
 INFO: [Project 1-570] Preparing netlist for logic optimization
 
 Processing XDC Constraints
@@ -53,26 +56,26 @@ Parsing XDC File [D:/dev/reti-logiche-2022/Progetto.srcs/constrs_1/new/clock.xdc
 Finished Parsing XDC File [D:/dev/reti-logiche-2022/Progetto.srcs/constrs_1/new/clock.xdc]
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1150.387 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1180.793 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.011 . Memory (MB): peak = 1150.387 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.010 . Memory (MB): peak = 1180.793 ; gain = 0.000
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1150.387 ; gain = 6.215
+Finished Constraint Validation : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1180.793 ; gain = 37.012
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a200tfbg484-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1150.387 ; gain = 6.215
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1180.793 ; gain = 37.012
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1150.387 ; gain = 6.215
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1180.793 ; gain = 37.012
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-802] inferred FSM for state register 'cur_state_reg' in module 'serializer'
 INFO: [Synth 8-802] inferred FSM for state register 'cur_state_reg' in module 'convolutor'
@@ -101,20 +104,21 @@ INFO: [Synth 8-3354] encoded FSM with state register 'cur_state_reg' using encod
 ---------------------------------------------------------------------------------------------------
                    State |                     New Encoding |                Previous Encoding 
 ---------------------------------------------------------------------------------------------------
-                   reset |                       0000000001 |                             0000
-  read_words_ram_request |                       0000000010 |                             0001
-     read_words_ram_read |                       0000000100 |                             0010
-        read_ram_request |                       0000001000 |                             0011
-                    done |                       0000010000 |                             1001
-                read_ram |                       0000100000 |                             0100
-         serialize_debug |                       0001000000 |                             0101
-             write_ram_1 |                       0010000000 |                             0110
-             write_ram_2 |                       0100000000 |                             0111
-          write_ram_wait |                       1000000000 |                             1000
+                   reset |                      00000000001 |                             0000
+  read_words_ram_request |                      00000000010 |                             0001
+     read_words_ram_read |                      00000000100 |                             0010
+        read_ram_request |                      00000001000 |                             0011
+                    done |                      00000010000 |                             1010
+                read_ram |                      00000100000 |                             0100
+         serialize_debug |                      00001000000 |                             0101
+           load_from_par |                      00010000000 |                             0110
+             write_ram_1 |                      00100000000 |                             0111
+             write_ram_2 |                      01000000000 |                             1000
+          write_ram_wait |                      10000000000 |                             1001
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'cur_state_reg' using encoding 'one-hot' in module 'project_reti_logiche'
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1150.387 ; gain = 6.215
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1180.793 ; gain = 37.012
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
@@ -123,20 +127,26 @@ Detailed RTL Component Info :
 +---Adders : 
 	   2 Input   11 Bit       Adders := 1     
 	   2 Input    8 Bit       Adders := 1     
+	   2 Input    4 Bit       Adders := 1     
 	   2 Input    3 Bit       Adders := 1     
 +---Registers : 
+	               16 Bit    Registers := 1     
 	                8 Bit    Registers := 4     
+	                4 Bit    Registers := 1     
 	                3 Bit    Registers := 1     
+	                1 Bit    Registers := 1     
 +---Muxes : 
-	   2 Input   11 Bit        Muxes := 1     
-	   2 Input   10 Bit        Muxes := 5     
-	  10 Input   10 Bit        Muxes := 1     
-	   2 Input    8 Bit        Muxes := 2     
+	   2 Input   16 Bit        Muxes := 1     
+	   2 Input   11 Bit        Muxes := 5     
+	  11 Input   11 Bit        Muxes := 1     
+	   2 Input   10 Bit        Muxes := 1     
+	   2 Input    8 Bit        Muxes := 3     
 	   3 Input    3 Bit        Muxes := 1     
 	   2 Input    3 Bit        Muxes := 6     
 	   8 Input    3 Bit        Muxes := 1     
 	   8 Input    1 Bit        Muxes := 1     
-	  10 Input    1 Bit        Muxes := 3     
+	   2 Input    1 Bit        Muxes := 1     
+	  11 Input    1 Bit        Muxes := 4     
 ---------------------------------------------------------------------------------
 Finished RTL Component Statistics 
 ---------------------------------------------------------------------------------
@@ -153,25 +163,25 @@ Finished Part Resource Summary
 Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 1150.387 ; gain = 6.215
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 1180.793 ; gain = 37.012
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:21 ; elapsed = 00:00:22 . Memory (MB): peak = 1150.387 ; gain = 6.215
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:21 ; elapsed = 00:00:23 . Memory (MB): peak = 1180.793 ; gain = 37.012
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:21 ; elapsed = 00:00:22 . Memory (MB): peak = 1150.387 ; gain = 6.215
+Finished Timing Optimization : Time (s): cpu = 00:00:22 ; elapsed = 00:00:23 . Memory (MB): peak = 1180.793 ; gain = 37.012
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:21 ; elapsed = 00:00:22 . Memory (MB): peak = 1150.387 ; gain = 6.215
+Finished Technology Mapping : Time (s): cpu = 00:00:22 ; elapsed = 00:00:23 . Memory (MB): peak = 1180.793 ; gain = 37.012
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -189,37 +199,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:25 ; elapsed = 00:00:26 . Memory (MB): peak = 1155.785 ; gain = 11.613
+Finished IO Insertion : Time (s): cpu = 00:00:25 ; elapsed = 00:00:26 . Memory (MB): peak = 1180.793 ; gain = 37.012
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:25 ; elapsed = 00:00:26 . Memory (MB): peak = 1155.785 ; gain = 11.613
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:25 ; elapsed = 00:00:26 . Memory (MB): peak = 1180.793 ; gain = 37.012
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:25 ; elapsed = 00:00:26 . Memory (MB): peak = 1155.785 ; gain = 11.613
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:25 ; elapsed = 00:00:26 . Memory (MB): peak = 1180.793 ; gain = 37.012
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:25 ; elapsed = 00:00:26 . Memory (MB): peak = 1155.785 ; gain = 11.613
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:25 ; elapsed = 00:00:26 . Memory (MB): peak = 1180.793 ; gain = 37.012
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:25 ; elapsed = 00:00:26 . Memory (MB): peak = 1155.785 ; gain = 11.613
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:25 ; elapsed = 00:00:26 . Memory (MB): peak = 1180.793 ; gain = 37.012
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:25 ; elapsed = 00:00:26 . Memory (MB): peak = 1155.785 ; gain = 11.613
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:25 ; elapsed = 00:00:26 . Memory (MB): peak = 1180.793 ; gain = 37.012
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -237,38 +247,38 @@ Report Cell Usage:
 +------+-------+------+
 |1     |BUFG   |     1|
 |2     |CARRY4 |     1|
-|3     |LUT1   |     1|
-|4     |LUT2   |     8|
-|5     |LUT3   |     6|
-|6     |LUT4   |     4|
-|7     |LUT5   |     3|
-|8     |LUT6   |    27|
-|9     |FDCE   |    30|
-|10    |FDPE   |     2|
+|3     |LUT1   |     2|
+|4     |LUT2   |    14|
+|5     |LUT3   |    17|
+|6     |LUT4   |     7|
+|7     |LUT5   |     4|
+|8     |LUT6   |    47|
+|9     |FDCE   |    72|
+|10    |FDPE   |     1|
 |11    |IBUF   |    11|
 |12    |OBUF   |    27|
 +------+-------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:25 ; elapsed = 00:00:26 . Memory (MB): peak = 1155.785 ; gain = 11.613
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:25 ; elapsed = 00:00:26 . Memory (MB): peak = 1180.793 ; gain = 37.012
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 0 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:16 ; elapsed = 00:00:23 . Memory (MB): peak = 1155.785 ; gain = 5.398
-Synthesis Optimization Complete : Time (s): cpu = 00:00:25 ; elapsed = 00:00:26 . Memory (MB): peak = 1155.785 ; gain = 11.613
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:16 ; elapsed = 00:00:24 . Memory (MB): peak = 1180.793 ; gain = 0.000
+Synthesis Optimization Complete : Time (s): cpu = 00:00:25 ; elapsed = 00:00:27 . Memory (MB): peak = 1180.793 ; gain = 37.012
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1167.859 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1180.793 ; gain = 0.000
 INFO: [Netlist 29-17] Analyzing 1 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1185.004 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1185.348 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Synth Design complete, checksum: b74b550f
+Synth Design complete, checksum: 6640d1a2
 INFO: [Common 17-83] Releasing license: Synthesis
-31 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+34 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:29 ; elapsed = 00:00:34 . Memory (MB): peak = 1185.004 ; gain = 40.832
+synth_design: Time (s): cpu = 00:00:29 ; elapsed = 00:00:35 . Memory (MB): peak = 1185.348 ; gain = 41.566
 INFO: [Common 17-1381] The checkpoint 'D:/dev/reti-logiche-2022/Progetto.runs/synth_1/project_reti_logiche.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file project_reti_logiche_utilization_synth.rpt -pb project_reti_logiche_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Mon Mar 28 17:00:55 2022...
+INFO: [Common 17-206] Exiting Vivado at Wed Mar 30 18:54:38 2022...
