@@ -66,6 +66,8 @@ architecture behavioral of project_reti_logiche is
         conv_output    : out std_logic        
     );
     end component;
+    
+    
             
     type fsm_state is (
         RESET, -- resetta tutti i segnali e parte con una nuova operazione
@@ -543,6 +545,120 @@ begin
 end architecture;
 
 
+
+
+
+
+
+
+
+
+
+
+-- PARALLELIZER
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use ieee.std_logic_unsigned.all;
+
+entity parallelizer is
+    port (
+        i_clk         : in  std_logic;
+        i_rst         : in  std_logic;
+        par_start     : in  std_logic;
+        par_set_out   : in  std_logic; -- '0' to output first word '1' output second
+        
+        par_input     : in std_logic; 
+        par_output    : out std_logic_vector(7 downto 0)
+    );
+end entity;
+
+
+architecture behavioral of parallelizer is
+    
+    type fsm_par_state is (
+        STOPPED,
+        ACTIVE
+    );
+    
+    signal cur_state : fsm_par_state;
+    signal next_state : fsm_par_state;
+    
+    signal internal_reg_load : std_logic;
+    signal internal_registry : std_logic_vector(0 to 15); -- al contrario cosi i primi bit vengono messi in alto 
+    signal reg_count : std_logic_vector(3 downto 0);
+
+begin
+    FSM_STATE_CHANGE : process(i_clk, i_rst)
+    begin
+        if i_rst = '1' then
+            cur_state <= STOPPED;
+        elsif i_clk'EVENT and i_clk = '1' then
+            cur_state <= next_state;
+        end if;
+    end process;
+    
+    FSM_FLOW : process(cur_state, par_start, reg_count)
+    begin
+        next_state <= cur_state;
+        case cur_state is
+            when STOPPED =>
+                if par_start = '1' then 
+                    next_state <= ACTIVE;
+                else 
+                    next_state <= STOPPED;
+                end if;
+            when ACTIVE =>
+                if reg_count = "1111" then
+                    next_state <= STOPPED;
+                else
+                    next_state <= ACTIVE;
+                end if;
+            end case;
+    end process;
+    
+    FSM_OUT : process(cur_state)
+    begin
+        internal_reg_load <= '0';
+        case cur_state is
+            when STOPPED =>
+            when ACTIVE =>
+                internal_reg_load <= '1';
+        end case;
+    end process;
+    
+    REG_COUNT_PROCESS : process(i_rst, par_start, i_clk)
+    begin
+        if i_rst = '1' or par_start = '0' then 
+            reg_count <= "0000";
+        else 
+            if i_clk'event and i_clk = '1' then
+                    reg_count <= reg_count + "0001";
+            end if;
+        end if;
+    end process;
+    
+    INTERNAL_REG_PROCESS : process(i_rst, par_start, i_clk, reg_count, par_input)
+    begin
+        if i_rst = '1' or par_start = '0' then 
+            internal_registry <= "0000000000000000";
+        else 
+            if i_clk'event and i_clk = '1' then
+                    internal_registry(conv_integer(reg_count)) <= par_input;
+            end if;
+        end if;
+    end process;
+    
+    MUX_OUT : process(par_set_out)
+    begin
+        if par_set_out = '0' then
+            par_output <= internal_registry(0 to 7);
+        else
+            par_output <= internal_registry(8 to 15);
+        end if;
+    end process;
+
+end architecture;
 
 
 
