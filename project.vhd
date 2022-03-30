@@ -40,7 +40,10 @@ architecture behavioral of project_reti_logiche is
         
         --datapath signals of convolutor 
         to_conv_input : out std_logic;
-        from_conv_output : in std_logic
+        from_conv_output : in std_logic;
+        --datapath signals of parallelizer
+        to_par_input : out std_logic;
+        from_par_output : in std_logic_vector(7 downto 0)
     );
     end component;
     
@@ -67,7 +70,17 @@ architecture behavioral of project_reti_logiche is
     );
     end component;
     
-    
+    component parallelizer is
+    port (
+        i_clk         : in  std_logic;
+        i_rst         : in  std_logic;
+        par_start     : in  std_logic;
+        par_set_out   : in  std_logic; -- '0' to output first word '1' output second
+        
+        par_input     : in std_logic; 
+        par_output    : out std_logic_vector(7 downto 0)
+    );
+    end component;
             
     type fsm_state is (
         RESET, -- resetta tutti i segnali e parte con una nuova operazione
@@ -79,6 +92,7 @@ architecture behavioral of project_reti_logiche is
         READ_RAM,
         
         SERIALIZE_DEBUG,
+        LOAD_FROM_PAR,
         
         WRITE_RAM_1,
         WRITE_RAM_2,
@@ -108,10 +122,17 @@ architecture behavioral of project_reti_logiche is
     signal ser_output : std_logic;
     -- Convolutor control signals
     signal conv_reset : std_logic;
-    signal conv_pause : std_logic;
+    --signal conv_pause : std_logic;
     -- Convolutor data signals
     signal conv_input : std_logic;
     signal conv_output : std_logic;
+    -- Parallelizer control signals
+    --signal par_start : std_logic;
+    signal par_set_out : std_logic;
+    -- Parallelizer data signals 
+    signal par_input : std_logic;
+    signal par_output : std_logic_vector(7 downto 0);
+    
     
     
     -- Done signal from datapath
@@ -139,7 +160,10 @@ begin
         ser_output,
         
         conv_input,
-        conv_output
+        conv_output,
+        
+        par_input,
+        par_output
     );
     
     SERIALIZER0 : serializer port map( -- TODO
@@ -158,6 +182,15 @@ begin
         ser_done, -- Passing directly ser_done as when the serialized has stopped fsm must be paused
         conv_input,
         conv_output
+    );
+    
+    PARALLELIZER0 : parallelizer port map(
+        i_clk,
+        i_rst,
+        ser_start, -- passing ser start directly as the par starts with the serializer
+        par_set_out,
+        par_input,
+        par_output
     );
     
     
@@ -202,8 +235,10 @@ begin
                 if ser_done = '0' then 
                     next_state <= SERIALIZE_DEBUG;
                 else 
-                    next_state <= WRITE_RAM_1;
+                    next_state <= LOAD_FROM_PAR;
                 end if;
+            when LOAD_FROM_PAR =>
+                next_state <= WRITE_RAM_1;
                 
             when WRITE_RAM_1 =>
                 next_state <= WRITE_RAM_2;
@@ -237,6 +272,7 @@ begin
         mux_rw_addr_sel <= "00";
         ser_start <= '0';
         conv_reset <= '0';
+        par_set_out <= '0';
         
         -- o_address <= "0000000000000000";
         o_en <= '0';
@@ -269,8 +305,14 @@ begin
             when SERIALIZE_DEBUG =>
                 -- reg_out_load <= '';
         
-        
+            when LOAD_FROM_PAR =>
+                par_set_out <= '0';
+                reg_out_load <= '1';
+                
             when WRITE_RAM_1 =>
+                par_set_out <= '1';
+                reg_out_load <= '1';
+                
                 o_en <= '1';
                 o_we <= '1';
                 mux_rw_addr_sel <= "01";
@@ -339,7 +381,10 @@ entity datapath is
         from_ser_output : in std_logic;
         --datapath signals of convolutor 
         to_conv_input : out std_logic;
-        from_conv_output : in std_logic
+        from_conv_output : in std_logic;
+        --datapath signals of parallelizer
+        to_par_input : out std_logic;
+        from_par_output : in std_logic_vector(7 downto 0)
     );
 end datapath;
 
@@ -369,13 +414,15 @@ begin
     
     to_conv_input <= from_ser_output;
     
+    to_par_input <= from_conv_output;
+    
     REG_OUT_PROCESS : process(i_clk, i_rst)
     begin
         if i_rst = '1' then
             reg_out <= "00000000";
         elsif i_clk'event and i_clk = '1' then
             if reg_out_load = '1' then
-                reg_out <= from_conv_output & "0000000";
+                reg_out <= from_par_output;
             end if;
         end if;
     end process;
@@ -627,29 +674,34 @@ begin
         end case;
     end process;
     
-    REG_COUNT_PROCESS : process(i_rst, par_start, i_clk)
+    
+    REG_COUNT_PROCESS : process(i_rst, par_start, i_clk, reg_count)
     begin
-        if i_rst = '1' or par_start = '0' then 
+        if i_rst = '1' or par_start = '1' then 
             reg_count <= "0000";
         else 
             if i_clk'event and i_clk = '1' then
-                    reg_count <= reg_count + "0001";
+                reg_count <= reg_count + "0001";
+            else 
+                reg_count <= reg_count;
             end if;
         end if;
     end process;
     
-    INTERNAL_REG_PROCESS : process(i_rst, par_start, i_clk, reg_count, par_input)
+    INTERNAL_REG_PROCESS : process(i_rst, par_start, i_clk, reg_count, par_input, internal_reg_load)
     begin
-        if i_rst = '1' or par_start = '0' then 
+        if i_rst = '1' or par_start = '1' then 
             internal_registry <= "0000000000000000";
         else 
             if i_clk'event and i_clk = '1' then
+                if internal_reg_load = '1' then
                     internal_registry(conv_integer(reg_count)) <= par_input;
+                end if;
             end if;
         end if;
     end process;
     
-    MUX_OUT : process(par_set_out)
+    MUX_OUT : process(par_set_out, internal_registry)
     begin
         if par_set_out = '0' then
             par_output <= internal_registry(0 to 7);
