@@ -393,9 +393,9 @@ architecture behavioral of datapath is
     signal reg_in : std_logic_vector(7 downto 0);
     signal reg_out : std_logic_vector(7 downto 0);
     signal reg_words : std_logic_vector(7 downto 0);
-    signal reg_count : std_logic_vector(7 downto 0);
+    signal reg_count : std_logic_vector(15 downto 0);
     
-    signal mux_count : std_logic_vector(7 downto 0);
+    signal mux_count : std_logic_vector(15 downto 0);
 
 begin
     
@@ -444,10 +444,10 @@ begin
     REG_COUNT_PROCESS : process(i_clk, i_rst)
     begin
         if i_rst = '1' then
-            reg_count <= "00000000";
+            reg_count <= "0000000000000000";
         elsif i_clk'event and i_clk = '1' then
             if reg_count_load = '1' then
-                reg_count <= mux_count + "00000001";
+                reg_count <= mux_count + "0000000000000001";
             end if;
         end if;
     end process;
@@ -455,7 +455,7 @@ begin
     MUX_COUNT_PROCESS : process(mux_count_rst, i_rst, reg_count)
     begin
         if i_rst = '1' or mux_count_rst = '1' then
-            mux_count <= "11111111"; -- neg(1)
+            mux_count <= "1111111111111111"; -- neg(1)
         else
             mux_count <= reg_count;
         end if;
@@ -464,17 +464,17 @@ begin
     MUX_RW_ADDR_PROCESS : process(mux_rw_addr_sel, mux_count, reg_count, i_rst)
     begin
         if i_rst = '1' or mux_rw_addr_sel = "00" or mux_rw_addr_sel = "11" then
-            o_address <= "00000000" & reg_count;
+            o_address <= reg_count;
         elsif mux_rw_addr_sel = "01" then
-            o_address <= ("00000000" & (mux_count + mux_count)) + "0000001111100110"; -- mux_count + 998
+            o_address <= (mux_count + mux_count) + "0000001111100110"; -- mux_count + 998
         else --if mux_rw_addr_sel = "10" then
-            o_address <= ("00000000" & (mux_count + mux_count)) + "0000001111100111"; -- mux_count + 999
+            o_address <= (mux_count + mux_count) + "0000001111100111"; -- mux_count + 999
         end if;
     end process;
     
     DONE_COMPARATOR_PROCESS : process(reg_words, mux_count)
     begin
-        if mux_count <= reg_words then
+        if mux_count <= ("00000000" & reg_words) then
             o_done_signal <= '0';
         else
             o_done_signal <= '1';

@@ -5,5 +5,3 @@ INFO: [VRFC 10-311] analyzing module parallelizer
 INFO: [VRFC 10-311] analyzing module project_reti_logiche
 INFO: [VRFC 10-311] analyzing module serializer
 INFO: [VRFC 10-311] analyzing module glbl
-INFO: [VRFC 10-163] Analyzing VHDL file "D:/dev/reti-logiche-2022/Progetto.srcs/sim_1/new/auto_testbench.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'project_tb'

@@ -1,7 +1,7 @@
 Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2021.1 (win64) Build 3247384 Thu Jun 10 19:36:33 MDT 2021
-| Date         : Sat Apr  2 11:25:12 2022
+| Date         : Sat Apr  9 00:07:26 2022
 | Host         : AIROLDI01 running 64-bit major release  (build 9200)
 | Command      : report_methodology -file project_reti_logiche_methodology_drc_routed.rpt -pb project_reti_logiche_methodology_drc_routed.pb -rpx project_reti_logiche_methodology_drc_routed.rpx
 | Design       : project_reti_logiche
@@ -20,7 +20,7 @@ Table of Contents
 1. REPORT SUMMARY
 -----------------
             Netlist: netlist
-          Floorplan: checkpoint_project_reti_logiche
+          Floorplan: design_1
       Design limits: <entire design considered>
              Max violations: <unlimited>
              Violations found: 39

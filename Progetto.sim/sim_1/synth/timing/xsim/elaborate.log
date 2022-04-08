@@ -28,8 +28,9 @@ Compiling module simprims_ver.LUT3
 Compiling module simprims_ver.x_lut2_mux4
 Compiling module simprims_ver.LUT2
 Compiling module simprims_ver.FDCE_default
-Compiling module simprims_ver.LUT6
 Compiling module xil_defaultlib.convolutor
+Compiling module simprims_ver.LUT6
+Compiling module simprims_ver.MUXF7
 Compiling module simprims_ver.CARRY4
 Compiling module simprims_ver.LUT5
 Compiling module xil_defaultlib.datapath

@@ -26,8 +26,9 @@ Compiling module unisims_ver.LUT3
 Compiling module unisims_ver.x_lut2_mux4
 Compiling module unisims_ver.LUT2
 Compiling module unisims_ver.FDCE_default
-Compiling module unisims_ver.LUT6
 Compiling module xil_defaultlib.convolutor
+Compiling module unisims_ver.LUT6
+Compiling module unisims_ver.MUXF7
 Compiling module unisims_ver.CARRY4
 Compiling module unisims_ver.LUT5
 Compiling module xil_defaultlib.datapath

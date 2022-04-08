@@ -1,7 +1,7 @@
 Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------
 | Tool Version              : Vivado v.2021.1 (win64) Build 3247384 Thu Jun 10 19:36:33 MDT 2021
-| Date                      : Sat Apr  2 11:24:11 2022
+| Date                      : Sat Apr  9 00:06:26 2022
 | Host                      : AIROLDI01 running 64-bit major release  (build 9200)
 | Command                   : report_io -file project_reti_logiche_io_placed.rpt
 | Design                    : project_reti_logiche
