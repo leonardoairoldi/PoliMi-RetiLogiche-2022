@@ -1,7 +1,7 @@
 // Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2021.1 (win64) Build 3247384 Thu Jun 10 19:36:33 MDT 2021
-// Date        : Sat Apr  9 00:27:46 2022
+// Date        : Sat Apr  9 19:04:26 2022
 // Host        : AIROLDI01 running 64-bit major release  (build 9200)
 // Command     : write_verilog -mode funcsim -nolib -force -file
 //               D:/dev/reti-logiche-2022/Progetto.sim/sim_1/synth/func/xsim/project_tb_func_synth.v
@@ -1984,7 +1984,7 @@ module project_reti_logiche
        (.I0(reg_words_load),
         .I1(\FSM_onehot_cur_state_reg_n_0_[10] ),
         .O(\FSM_onehot_cur_state[3]_i_1_n_0 ));
-  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize_debug:00001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize:00001000000" *) 
   FDPE #(
     .INIT(1'b1)) 
     \FSM_onehot_cur_state_reg[0] 
@@ -1993,7 +1993,7 @@ module project_reti_logiche
         .D(\FSM_onehot_cur_state[0]_i_1_n_0 ),
         .PRE(i_rst_IBUF),
         .Q(mux_count_rst));
-  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize_debug:00001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize:00001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[10] 
@@ -2002,7 +2002,7 @@ module project_reti_logiche
         .CLR(i_rst_IBUF),
         .D(\FSM_onehot_cur_state_reg_n_0_[9] ),
         .Q(\FSM_onehot_cur_state_reg_n_0_[10] ));
-  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize_debug:00001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize:00001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[1] 
@@ -2011,7 +2011,7 @@ module project_reti_logiche
         .CLR(i_rst_IBUF),
         .D(\FSM_onehot_cur_state[1]_i_1__0_n_0 ),
         .Q(\FSM_onehot_cur_state_reg_n_0_[1] ));
-  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize_debug:00001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize:00001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[2] 
@@ -2020,7 +2020,7 @@ module project_reti_logiche
         .CLR(i_rst_IBUF),
         .D(\FSM_onehot_cur_state_reg_n_0_[1] ),
         .Q(reg_words_load));
-  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize_debug:00001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize:00001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[3] 
@@ -2029,7 +2029,7 @@ module project_reti_logiche
         .CLR(i_rst_IBUF),
         .D(\FSM_onehot_cur_state[3]_i_1_n_0 ),
         .Q(\FSM_onehot_cur_state_reg_n_0_[3] ));
-  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize_debug:00001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize:00001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[4] 
@@ -2038,7 +2038,7 @@ module project_reti_logiche
         .CLR(i_rst_IBUF),
         .D(DATAPATH0_n_18),
         .Q(o_done_OBUF));
-  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize_debug:00001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize:00001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[5] 
@@ -2047,7 +2047,7 @@ module project_reti_logiche
         .CLR(i_rst_IBUF),
         .D(DATAPATH0_n_17),
         .Q(reg_in_load));
-  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize_debug:00001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize:00001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[6] 
@@ -2056,7 +2056,7 @@ module project_reti_logiche
         .CLR(i_rst_IBUF),
         .D(SERIALIZER0_n_5),
         .Q(\FSM_onehot_cur_state_reg_n_0_[6] ));
-  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize_debug:00001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize:00001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[7] 
@@ -2065,7 +2065,7 @@ module project_reti_logiche
         .CLR(i_rst_IBUF),
         .D(SERIALIZER0_n_4),
         .Q(\FSM_onehot_cur_state_reg_n_0_[7] ));
-  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize_debug:00001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize:00001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[8] 
@@ -2074,7 +2074,7 @@ module project_reti_logiche
         .CLR(i_rst_IBUF),
         .D(\FSM_onehot_cur_state_reg_n_0_[7] ),
         .Q(par_set_out));
-  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize_debug:00001000000" *) 
+  (* FSM_ENCODED_STATES = "read_ram:00000100000,read_ram_request:00000001000,read_words_ram_read:00000000100,done:00000010000,read_words_ram_request:00000000010,reset:00000000001,write_ram_wait:10000000000,write_ram_1:00100000000,write_ram_2:01000000000,load_from_par:00010000000,serialize:00001000000" *) 
   FDCE #(
     .INIT(1'b0)) 
     \FSM_onehot_cur_state_reg[9] 

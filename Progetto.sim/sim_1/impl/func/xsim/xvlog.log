@@ -1,0 +1,7 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/dev/reti-logiche-2022/Progetto.sim/sim_1/impl/func/xsim/project_tb_func_impl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module convolutor
+INFO: [VRFC 10-311] analyzing module datapath
+INFO: [VRFC 10-311] analyzing module parallelizer
+INFO: [VRFC 10-311] analyzing module project_reti_logiche
+INFO: [VRFC 10-311] analyzing module serializer
+INFO: [VRFC 10-311] analyzing module glbl

@@ -91,7 +91,7 @@ architecture behavioral of project_reti_logiche is
         READ_RAM_REQUEST,
         READ_RAM,
         
-        SERIALIZE_DEBUG,
+        SERIALIZE,
         LOAD_FROM_PAR,
         
         WRITE_RAM_1,
@@ -228,12 +228,12 @@ begin
                 end if;
                 
             when READ_RAM =>
-                next_state <= SERIALIZE_DEBUG;
+                next_state <= SERIALIZE;
             
             
-            when SERIALIZE_DEBUG =>
+            when SERIALIZE =>
                 if ser_done = '0' then 
-                    next_state <= SERIALIZE_DEBUG;
+                    next_state <= SERIALIZE;
                 else 
                     next_state <= LOAD_FROM_PAR;
                 end if;
@@ -302,7 +302,7 @@ begin
                 reg_in_load <= '1';
                 ser_start <= '1';
             
-            when SERIALIZE_DEBUG =>
+            when SERIALIZE =>
                 -- reg_out_load <= '';
         
             when LOAD_FROM_PAR =>
