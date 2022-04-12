@@ -1,4 +1,4 @@
-RESET => read_word_ram_request
+RESET => i_start ? read_word_ram_request : reset
         
 READ_WORDS_RAM_REQUEST => read_words_ram_read
 READ_WORDS_RAM_READ => read_ram_request
@@ -15,3 +15,70 @@ WRITE_RAM_WAIT => read_ram_request
         
 
 DONE => i_start ? done : reset
+
+
+
+STATES
+By default all signals are low
+
+--DEFAULT
+reg_in_load <= '0';
+reg_out_load <= '0';
+reg_words_load <= '0';
+reg_count_load <= '0';
+mux_count_rst <= '0';
+mux_rw_addr_sel <= "00";
+ser_start <= '0';
+conv_reset <= '0';
+par_set_out <= '0';
+o_en <= '0';
+o_we <= '0';
+o_done <= '0';
+
+
+RESET =>
+mux_count_rst <= '1';
+reg_count_load <= '1';
+conv_reset <= '1';
+
+READ_WORDS_RAM_REQUEST =>
+mux_rw_addr_sel <= "00";
+o_en <= '1';
+
+READ_WORDS_RAM_READ =>
+reg_words_load <= '1';
+reg_count_load <= '1';
+
+READ_RAM_REQUEST =>
+mux_rw_addr_sel <= "00";
+o_en <= '1';
+                
+READ_RAM =>
+reg_in_load <= '1';
+ser_start <= '1';
+            
+SERIALIZE =>
+
+        
+LOAD_FROM_PAR =>
+par_set_out <= '0';
+reg_out_load <= '1';
+                
+WRITE_RAM_1 =>
+par_set_out <= '1';
+reg_out_load <= '1';
+                
+o_en <= '1';
+o_we <= '1';
+mux_rw_addr_sel <= "01";
+            
+WRITE_RAM_2 =>
+o_en <= '1';
+o_we <= '1';
+mux_rw_addr_sel <= "10";
+                
+WRITE_RAM_WAIT =>
+reg_count_load <= '1'; -- Increment reg_count for next operation
+            
+DONE =>                
+o_done <= '1';

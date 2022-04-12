@@ -1,0 +1,102 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{microtype}
+\usepackage{appendix}
+\usepackage{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{siunitx} % Provides the \SI{}{} and \si{} command for typesetting SI units
+\usepackage{graphicx} % Required for the inclusion of images
+\usepackage{natbib} % Required to change bibliography style to APA
+\usepackage{amsmath} % Required for some math elements 
+\usepackage{caption}
+\usepackage{tikz}
+\usepackage{pdfpages}
+\usepackage[hidelinks]{hyperref}
+
+\usetikzlibrary{arrows,automata, positioning}
+
+\usepackage{import}
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Prova Finale di Reti Logiche} % Title
+\author{Leonardo Airoldi} % Author name
+\date{A. A. 2021-22}
+
+\begin{document}
+\maketitle % Insert the title, author and date
+
+
+\tableofcontents
+\newpage
+
+
+
+% If you wish to include an abstract, uncomment the lines below
+% \begin{abstract}
+% Abstract text
+% \end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	INTRODUZIONE
+%----------------------------------------------------------------------------------------
+
+\chapter{Introduzione}
+
+
+La specifica della Prova finale (Progetto di Reti Logiche) 2021 richiede di implementare un \textbf{codificatore convoluzionale} usando il linguaggio VHDL.\\
+Un codificatore convoluzionale è un dispositivo che tramite l'applicazione di un \textit{codice convoluzionale} codifica uno stream di bit in ingresso in uno stream di bit in uscita ridondante che permette a un dispositivo che legge lo stream codificato di risalire allo stream originale anche in presenza di errori applicando tecniche di \textit{error-correction}.
+Codificatori convoluzionali elettronici sono molto comuni nell'ambito delle telecomunicazioni, in quanto conferiscono a una rete un certo grado di robustezza: un dispositivo ricevente può ricostruire il segnale trasmesso, che potrebbe risultare corrotto a causa del rumore sulla linea, senza richiedere un ulteriore invio dell'informazione.
+
+\section{Specifiche}
+Nel caso specifico di questo progetto, è richiesto lo sviluppo di un circuito integrato con le seguenti caratteristiche: 
+\begin{enumerate}
+\item il \textit{codice convoluzionale} ha \textbf{tasso di trasmissione} $\frac{1} {2}$.
+\item si interfaccia con una memoria sincrona a word di 8bit e indirizzi a 16bit.
+\item lo stream in ingresso è di dimensione $n$ words memorizzate a partire dall'indirizzo \texttt{0x01}.
+\item la dimensione dello stream è memorizzata all'indirizzo \texttt{0x00} ed è al massimo di 255 word.
+\item il dispositivo viene sempre inizializzato con un segnale di \texttt{reset}.
+\item la computazione inizia al segnale di \texttt{start} e termina quando il dispositivo alza il segnale \texttt{done}. Il dispositivo deve essere in grado di gestire computazioni successive senza aver bisogno di un segnale di \texttt{reset}. Si presuppone che il segnale di \texttt{start} rimanga alto durante tutta la computazione e che non possa essere rialzato prima che il segnale di \texttt{done} sia stato riportato a \texttt{0}.
+\item il dispositivo deve funzionare con un periodo di clock di almeno \texttt{100ns}
+\end{enumerate}
+
+\section{Strumenti}
+Il progetto sarà sviluppato in \textbf{VHDL} (VHSIC Hardware Description Language) che permette di descrivere circuiti integrati.
+Per la simulazione e la sintesi della scheda il software utilizzato è \textbf{Xilinx Vivado} (\textit{v2021.1}).
+Il dispositivo sarà poi implementato su una \textbf{FPGA Artix 7 \texttt{xc7a200tfbg484-1}}.
+
+\section{Esempio}
+
+
+
+%----------------------------------------------------------------------------------------
+%	ARCHITETTURA
+%----------------------------------------------------------------------------------------
+
+\chapter{Architettura}
+
+
+
+%----------------------------------------------------------------------------------------
+%	RISULTATI SPERIMENTALI
+%----------------------------------------------------------------------------------------
+
+\chapter{Risultati sperimentali}
+
+
+
+%----------------------------------------------------------------------------------------
+%	CONCLUSIONE
+%----------------------------------------------------------------------------------------
+
+\chapter{Conclusione}
+
+
+\end{document}
