@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1649707228 "d:/dev/reti-logiche-2022/report/report.tex" "report.pdf" "report" 1649707230
+["pdflatex"] 1650028150 "d:/dev/reti-logiche-2022/report/report.tex" "report.pdf" "report" 1650028152
   "d:/Program Files/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1649520229 2971 def0b6c1f0b107b3b936def894055589 ""
   "d:/Program Files/texlive/2022/texmf-dist/fonts/map/fontname/texfonts.map" 1649521087 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "d:/Program Files/texlive/2022/texmf-dist/fonts/tfm/jknappen/ec/ecbx1000.tfm" 1649520733 3584 2d666ecf6d466d8b007246bc2f94d9da ""
@@ -189,11 +189,12 @@
   "d:/Program Files/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1649524959 4448450 fb4cf76122af63859205344be4189cfa ""
   "d:/Program Files/texlive/2022/texmf-var/web2c/pdftex/pdflatex.fmt" 1649525031 2826568 0be1b70deb9cdd12054300277be78a59 ""
   "d:/Program Files/texlive/2022/texmf.cnf" 1649524941 713 e69b156964470283e0530f5060668171 ""
-  "d:/dev/reti-logiche-2022/report/report.tex" 1649707225 4795 22d238a245c5b0e5c42b75d9f00103e9 ""
-  "report.aux" 1649707230 1866 e18be248c0d8520533c0e99fa5db0704 "pdflatex"
-  "report.out" 1649707230 752 847b1a9cc6d989618be9fc15e409164d "pdflatex"
-  "report.tex" 1649707225 4795 22d238a245c5b0e5c42b75d9f00103e9 ""
-  "report.toc" 1649707230 547 af57fbb06d6689f3b24955ca6ea6d744 "pdflatex"
+  "d:/dev/reti-logiche-2022/report/report.tex" 1650028149 6923 766f5792ca14745a9945dfc37af17953 ""
+  "report.aux" 1650028152 2098 2d1155d454cfc48a095b476fe45706e2 "pdflatex"
+  "report.out" 1650028152 1010 d20680ab94d64e0c58c3ff8719a9b79d "pdflatex"
+  "report.tex" 1650028149 6923 766f5792ca14745a9945dfc37af17953 ""
+  "report.toc" 1650028152 697 dc7d976e5114b6877fa6f8a0c08823cf "pdflatex"
+  "schematics/serializer.pdf" 1650027620 106549 6ad1dec5d414bd5bb26493ae033351ca ""
   (generated)
   "report.aux"
   "report.log"

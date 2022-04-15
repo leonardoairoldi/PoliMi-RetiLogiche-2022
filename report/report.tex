@@ -85,14 +85,18 @@ Il dispositivo è stato implementato come una macchina a stati che controlla un 
 
 \section{Serializzatore}
 
-Il \textbf{Serializzatore} è il compponente addetto alla serializzazione in un flusso continuo di bit dei byte caricati dalla ram.
+Il \textbf{serializzatore} è il componente addetto alla serializzazione in un flusso continuo di bit dei byte caricati dalla ram.
 Il serializzatore si interfaccia, oltre al segnale di \textit{clock} e al segnale di \textit{reset}, con il segnale di ingresso da serializzare [\texttt{input : 1 byte}] e dal segnale di controllo \textit{start}. Produce in uscita un segnale di \textit{output : 1 bit} che corrisponde al flusso serializzato del byte in input e un segnale di \textit{done} che indica la fine della serializzazione.
 
-\includegraphics[scale = 0.75]{schematics/serializer.pdf}
-
-Al segnale di \texttt{start} della serializzazione il componente passa dallo stato \textit{STOPPED} allo stato attivo. Quando il componente è attivo produce in uscita per \texttt{due clicli di clock} \textit{n-esimo} bit del segnale in ingresso, incrementando poi il contatore per produrre in uscita l'\textit{n+1 esimo} bit del byte in ingresso nei prossimi due cicli di clock. La serializzazione termina quando il contatore interno raggiunge il valore \texttt{111}: il registro viene incrementato tornando quindi a \texttt{0} ma il serializzatore torna nello stato \texttt{STOPPED}, che alza il segnale di \texttt{done} a \texttt{1}.
+Al segnale di \texttt{start} della serializzazione il componente passa dallo stato \texttt{STOPPED} allo stato attivo. Quando il componente è attivo produce in uscita per \textbf{due clicli di clock} l'\textit{n-esimo} bit del segnale in ingresso, incrementando poi il contatore per produrre in uscita l'\textit{n+1 esimo} bit del byte in ingresso nei prossimi due cicli di clock. La serializzazione termina quando il contatore interno raggiunge il valore \texttt{111}: il registro viene incrementato tornando quindi a \texttt{0} ma il serializzatore torna nello stato \texttt{STOPPED}, che alza il segnale di \texttt{done} a \texttt{1}.
 
 Il flusso in uscita ha periodo di due cicli di clock in quanto al convolutore server produrre due bit sequenzialmente in uscita per ogni bit in entrata. In questo modo la velocità di serializzazione è ridotta della metà ma il convolutore riesce a produrro il flusso risultante sullo stesso ciclo di clock della macchina.
+
+\includegraphics[scale = 0.45]{schematics/serializer.pdf}
+
+\section{Parallelizzatore}
+
+
 
 %----------------------------------------------------------------------------------------
 %	RISULTATI SPERIMENTALI

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.4.9)  11 APR 2022 22:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.4.9)  15 APR 2022 15:09
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -743,33 +743,41 @@ LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <10> not available
 
 ] [3]
 Capitolo 2.
+
+
+pdfTeX warning: pdflatex.exe (file ./schematics/serializer.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+<schematics/serializer.pdf, id=87, 845.07718pt x 597.55246pt>
+File: schematics/serializer.pdf Graphic file (type pdf)
+<use schematics/serializer.pdf>
+Package pdftex.def Info: schematics/serializer.pdf  used on input line 95.
+(pdftex.def)             Requested size: 380.28122pt x 268.89612pt.
 [4
 
-]
+] [5 <./schematics/serializer.pdf, page is rotated 90 degrees>]
 Capitolo 3.
-[5
+[6
 
 ]
 Capitolo 4.
-[6
+[7
 
 ] (./report.aux)
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: 847B1A9CC6D989618BE9FC15E409164D;752.
+(rerunfilecheck)             Checksum: D20680AB94D64E0C58C3FF8719A9B79D;1010.
  ) 
 Here is how much of TeX's memory you used:
- 29960 strings out of 478268
- 605227 string characters out of 5843326
+ 29989 strings out of 478268
+ 605675 string characters out of 5843326
  899557 words of memory out of 5000000
- 47622 multiletter control sequences out of 15000+600000
- 484405 words of font info for 95 fonts, out of 8000000 for 9000
+ 47630 multiletter control sequences out of 15000+600000
+ 484991 words of font info for 103 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,6n,89p,1035b,797s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {d:/Program Files/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}<d:/Program Files/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><d:/Program Files/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><d:/Program Files/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb><d:/Program Files/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><d:/Program Files/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx2074.pfb><d:/Program Files/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb><d:/Program Files/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><d:/Program Files/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><d:/Program Files/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb><d:/Program Files/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb><d:/Program Files/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on report.pdf (7 pages, 177519 bytes).
+Output written on report.pdf (8 pages, 290650 bytes).
 PDF statistics:
- 146 PDF objects out of 1000 (max. 8388607)
- 113 compressed objects within 2 object streams
- 22 named destinations out of 1000 (max. 500000)
- 35397 words of extra memory for PDF output out of 35830 (max. 10000000)
+ 172 PDF objects out of 1000 (max. 8388607)
+ 134 compressed objects within 2 object streams
+ 25 named destinations out of 1000 (max. 500000)
+ 35418 words of extra memory for PDF output out of 35830 (max. 10000000)
 
