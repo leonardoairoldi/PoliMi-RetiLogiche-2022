@@ -86,7 +86,7 @@ Il dispositivo è stato implementato come una macchina a stati che controlla un 
 \section{Serializzatore}
 
 Il \textbf{serializzatore} è il componente addetto alla serializzazione in un flusso continuo di bit dei byte caricati dalla ram.
-Il serializzatore si interfaccia, oltre al segnale di \textit{clock} e al segnale di \textit{reset}, con il segnale di ingresso da serializzare [\texttt{input : 1 byte}] e dal segnale di controllo \textit{start}. Produce in uscita un segnale di \textit{output : 1 bit} che corrisponde al flusso serializzato del byte in input e un segnale di \textit{done} che indica la fine della serializzazione.
+Il serializzatore si interfaccia, oltre al segnale di \textit{clock} e al segnale di \textit{reset}, con il segnale di ingresso da serializzare \texttt{[input:8bit]} e dal segnale di controllo \textit{start}. Produce in uscita un segnale di \texttt{[output:1bit]} che corrisponde al flusso serializzato del byte in input e un segnale di \textit{done} che indica la fine della serializzazione.
 
 Al segnale di \texttt{start} della serializzazione il componente passa dallo stato \texttt{STOPPED} allo stato attivo. Quando il componente è attivo produce in uscita per \textbf{due clicli di clock} l'\textit{n-esimo} bit del segnale in ingresso, incrementando poi il contatore per produrre in uscita l'\textit{n+1 esimo} bit del byte in ingresso nei prossimi due cicli di clock. La serializzazione termina quando il contatore interno raggiunge il valore \texttt{111}: il registro viene incrementato tornando quindi a \texttt{0} ma il serializzatore torna nello stato \texttt{STOPPED}, che alza il segnale di \texttt{done} a \texttt{1}.
 
@@ -95,9 +95,14 @@ Il flusso in uscita ha periodo di due cicli di clock in quanto al convolutore se
 \includegraphics[scale = 0.45]{schematics/serializer.pdf}
 
 \section{Parallelizzatore}
-Il \textbf{parallelizzatore} è il componente addetto alla raccolta del flusso in uscita dal convolutore e alla sua memorizzazione in un registro interno. Questo permette di "impacchettare" il flusso d'uscita in byte in modo da essere scritti sulla memoria ram. 
-Dato che a ogni byte in ingresso corrispondono 2 byte in uscita 
+Il \textbf{parallelizzatore} è il componente addetto alla raccolta del flusso in uscita dal convolutore e alla sua memorizzazione in un registro interno. Questo permette di \textit{impacchettare} il flusso d'uscita in byte in modo da essere scritti sulla memoria ram. 
+Dato che per questa configurazione del convolutore a \textbf{ogni byte in ingresso} corrispondono \textbf{2 byte in uscita}, questo componente è stato progettato con un registro interno a \textbf{16 bit} in modo da poter memorizzare i 2 byte in uscita dall'elaborazione di un singolo byte e gestire poi il caricamento delle 2 parole sulla RAM. 
 
+Il parallelizzatore si interfaccia con un ingresso \texttt{[input:1bit]} e produce un'uscita \texttt{[output:8bit]}, selezionabile tramite un \textbf{multiplexer}, che seleziona sull'uscita i bit \texttt{[0-7]} e \texttt{[8-15]} del registro interno.
+
+Al segnale di \texttt{start} il componente passa dallo stato \texttt{STOPPED} allo stato \texttt{ACTIVE}. Quando il componente è attivo memorizza il bit di \textbf{ingresso} nell'\textit{n-esimo} bit del registro interno, incrementando poi il contatore per il prossimo ciclo di clock. La parallelizzazione termina quando il contatore interno raggiunge il valore \texttt{1111}: il registro viene incrementato tornando quindi a \texttt{0} e il parallelizzatore torna nello stato \texttt{STOPPED}, tenendo però comunque memorizzati i valori nel registro. A questo punto la macchina a stati entra negli stati di \textit{caricamento in RAM}, dove carica nel registro di uscita in ordine il primo byte e il secondo nel registro di uscita, da cui poi il dato vene caricato sulla memoria.
+
+\includegraphics[scale = 0.45]{schematics/parallelizer.pdf}
 
 %----------------------------------------------------------------------------------------
 %	RISULTATI SPERIMENTALI
