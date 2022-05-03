@@ -120,6 +120,39 @@ Al segnale di \texttt{start} il componente passa dallo stato \texttt{STOPPED} al
 
 \includegraphics[scale = 0.45]{schematics/parallelizer.pdf}
 
+\section{Datapath}
+Il \textbf{datapath} è l'entità che \textbf{fornisce ai vari moduli un'interfaccia} per comunicare tra loro o con la \textbf{memoria RAM}.
+Per permettere le comunicazioni tra i vari moduli del dispositivo, istanziati nella macchina a stati (\textit{project\_reti\_logiche}), al datapath sono passati i segnali rappresentanti \textit{dati} (mentre non sono passati quelli di controllo, di responsabilità della macchina a stati) dei vari componenti, che poi vengono connessi all'interno del datapath.
+
+Il datapath contiene inoltre i componenti per interfacciarsi con la RAM e dei registri di supporto per la FSM.
+ 
+\textbf{Registri in out.} Nella fase di lettura dalla memoria ram il dato viene letto e caricato in un registro \textit{reg\_in}. Nella fase di scrittura invece il dato sarà prelevato dal registro \textit{reg\_out}. Entrambi i registri sono da 8bit e sono connessi rispettivamente al serializzatore e al parallelizzatore. Il loro caricamento viene gestito dalla FSM.
+
+\textbf{Registro words.} Nella fase di avvio del dispositivo viene letto all'indirizzo 0 della memoria il numero di byte da cui è formato lo stream di ingresso. Questo valore è memorizzato all'interno del registro \textit{reg\_words}, di 8bit in quanto la dimensione massima dello stream in ingresso è di 255 parole. Il suo caricamento è gestito dalla FSM.
+
+\textbf{Registro count.} Durante l'esecuzione è necessario memorizzare lo stato di avanzamento in modo da sapere a quale indirizzo della RAM accedere per leggere o scrivere dati. Questo resgistro memorizza al suo interno \textit{l'indirizzo} della cella di memoria di \textit{read} a cui si sta puntando. Per esempio se si sta leggendo la terza parola dello stream nel registro sarà presente il valore \texttt{0x0003} in quanto lo stream è memorizzato a partire dall'indirizzo \texttt{0x0001}. E' un registro a 16bit e il suo caricamento e incremento è gestito dalla FSM.
+
+\textbf{Done comparator.} Per rilevare la fine dell'elaborazione nel datapath è presente un comparatore. Esso effettua un controllo che porta un segnale di \textit{done} interno a 1 se il valore contenuto all'interno del registro di \textit{count} supera il numero di parole. Questo sfrutta il fatto che il numero della parola corrente corrisponde al contenuto del registro \textit{count}, in quando l'indirizzo della parola n-esima è n. Inoltre, se dovessimo essere nel caso in cui la lunghezza dello stream fosse 255, il confronto funzionerebbe ancora perchè fino a 255 il processo continuerebbe regolarmente mentre al raggiungimento di 256, valore possibile nel registro degli indirizzi a 16bit \textit{count}, il confronto finirebbe correttamente per segnalare la fine dell'esecuzione.
+\begin{verbatim}
+  if mux_count <= ("00000000" & reg_words) then
+            o_done_signal <= '0';
+        else
+            o_done_signal <= '1';
+\end{verbatim}
+
+\textbf{Multiplexer read write.} Il registro \textit{count} non è direttamente collegato con il segnale \textit{address} della memoria RAM. Questo perchè in scrittura devono essere utilizzati gli indirizzi contigui partendo dall'indirizzo 1000. Questo multiplexer permette di selezionare quale indirizzo viene passato al segnale di indirizzo della memoria:
+\begin{verbatim}
+  if i_rst = '1' or mux_rw_addr_sel = "00" or mux_rw_addr_sel = "11" then
+            o_address <= reg_count;
+        elsif mux_rw_addr_sel = "01" then
+            o_address <= (mux_count + mux_count) + "0000001111100110"; -- mux_count + 998
+        else --if mux_rw_addr_sel = "10" then
+            o_address <= (mux_count + mux_count) + "0000001111100111"; -- mux_count + 999
+        end if;
+\end{verbatim}
+Il mux seleziona di default il contenuto del registro \textit{count} usato in lettura dello stream. Per la scrittura dei due byte corrispondenti all'elaborazione dell'n-esima parola, viene selezionato l'indirizzo $2n + 998$ per il primo byte e $2n + 999$ per il secondo. Questo permette di scrivere nell'indirizzo giusto i due byte derivati dall'elaborazione dell'n-esimo byte. Per esempio, la convoluzione terza parola verrà scritta negli indirizzi \texttt{1004 1005}, in quanto la prima parola è scritta all'interno di \texttt{1000 1001} e la seconda in \texttt{1002 1003}, come da specifica.
+
+\includegraphics[scale = 0.45]{schematics/datapath.pdf}
 
 %----------------------------------------------------------------------------------------
 %	RISULTATI SPERIMENTALI
