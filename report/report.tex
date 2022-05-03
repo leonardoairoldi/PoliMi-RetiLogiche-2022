@@ -7,6 +7,7 @@
 \usepackage[italian]{babel}
 \usepackage{microtype}
 \usepackage{appendix}
+\usepackage{csquotes}
 \usepackage{geometry}
 \usepackage[T1]{fontenc}
 \usepackage{siunitx} % Provides the \SI{}{} and \si{} command for typesetting SI units
@@ -94,6 +95,21 @@ Il flusso in uscita ha periodo di due cicli di clock in quanto al convolutore se
 
 \includegraphics[scale = 0.45]{schematics/serializer.pdf}
 
+\section{Convolutore}
+Il \textbf{convolutore} è il componente che emula il comportamento della macchina a stati del convolutore convoluzionale. E' stato realizzato seguendo il modello ad \textit{automa a stati finiti (\textbf{FSM})}.
+Il componente si interfaccia (oltre al segnale di \textit{clock} e al segnale di \textit{reset}) a un segnale di reset interno e a un segnale di \textit{pause}. Questo permette al convolutore di fermare la propria macchina a stati ignorando l'\textit{input} ma mantenendo comunque lo stato corrente della macchina. Questo stato di pausa viene utilizzato per attendere i caricamenti da e verso la memoria RAM che richiedono qualche ciclo di clock per caricare/scaricare i registri nella memoria e viceversa. 
+
+L'automa produce due bit in serie per ogni bit ricevuto in ingresso: per questo è fonadmentale che il serializzatore mantenga per due cicli di clock il bit in ingresso. L'automa quindi possiede due stati per ogni macro-stato del convolutore convoluzionale, che corrispondono allo stato in cui l'uscita è settata a pk1 e l'uscita è settata a pk2.
+
+La scelta di implementare il componente in questo modo è stata presa per rispettare le specifiche di progetto:
+\begin{displayquote}
+  \textit{''Il flusso Y è ottenuto come concatenamento alternato dei due bit di uscita''}
+\end{displayquote}
+
+Avendo un convolutore implementato come \textbf{entity separata a sè stante} è possibile utilizzare il componente come da specifica anche in altri progetti. Se per esempio si fosse scelto di gestire l'output del convolutore come una coppia di segnali pk1 e pk2 si sarebbe ridotto il tempo di computazione ma la specifica riguardante il flusso di uscita di dimensione di 1bit sarebbe stata violata.
+
+\includegraphics[scale = 0.45]{schematics/convolutor.pdf}
+
 \section{Parallelizzatore}
 Il \textbf{parallelizzatore} è il componente addetto alla raccolta del flusso in uscita dal convolutore e alla sua memorizzazione in un registro interno. Questo permette di \textit{impacchettare} il flusso d'uscita in byte in modo da essere scritti sulla memoria ram. 
 Dato che per questa configurazione del convolutore a \textbf{ogni byte in ingresso} corrispondono \textbf{2 byte in uscita}, questo componente è stato progettato con un registro interno a \textbf{16 bit} in modo da poter memorizzare i 2 byte in uscita dall'elaborazione di un singolo byte e gestire poi il caricamento delle 2 parole sulla RAM. 
@@ -103,6 +119,7 @@ Il parallelizzatore si interfaccia con un ingresso \texttt{[input:1bit]} e produ
 Al segnale di \texttt{start} il componente passa dallo stato \texttt{STOPPED} allo stato \texttt{ACTIVE}. Quando il componente è attivo memorizza il bit di \textbf{ingresso} nell'\textit{n-esimo} bit del registro interno, incrementando poi il contatore per il prossimo ciclo di clock. La parallelizzazione termina quando il contatore interno raggiunge il valore \texttt{1111}: il registro viene incrementato tornando quindi a \texttt{0} e il parallelizzatore torna nello stato \texttt{STOPPED}, tenendo però comunque memorizzati i valori nel registro. A questo punto la macchina a stati entra negli stati di \textit{caricamento in RAM}, dove carica nel registro di uscita in ordine il primo byte e il secondo nel registro di uscita, da cui poi il dato vene caricato sulla memoria.
 
 \includegraphics[scale = 0.45]{schematics/parallelizer.pdf}
+
 
 %----------------------------------------------------------------------------------------
 %	RISULTATI SPERIMENTALI
