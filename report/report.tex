@@ -145,9 +145,9 @@ Il datapath contiene inoltre i componenti per interfacciarsi con la RAM e dei re
   if i_rst = '1' or mux_rw_addr_sel = "00" or mux_rw_addr_sel = "11" then
             o_address <= reg_count;
         elsif mux_rw_addr_sel = "01" then
-            o_address <= (mux_count + mux_count) + "0000001111100110"; -- mux_count + 998
+            o_address <= (mux_count + mux_count) + "0000001111100110";
         else --if mux_rw_addr_sel = "10" then
-            o_address <= (mux_count + mux_count) + "0000001111100111"; -- mux_count + 999
+            o_address <= (mux_count + mux_count) + "0000001111100111";
         end if;
 \end{verbatim}
 Il mux seleziona di default il contenuto del registro \textit{count} usato in lettura dello stream. Per la scrittura dei due byte corrispondenti all'elaborazione dell'n-esima parola, viene selezionato l'indirizzo $2n + 998$ per il primo byte e $2n + 999$ per il secondo. Questo permette di scrivere nell'indirizzo giusto i due byte derivati dall'elaborazione dell'n-esimo byte. Per esempio, la convoluzione terza parola verrà scritta negli indirizzi \texttt{1004 1005}, in quanto la prima parola è scritta all'interno di \texttt{1000 1001} e la seconda in \texttt{1002 1003}, come da specifica.
