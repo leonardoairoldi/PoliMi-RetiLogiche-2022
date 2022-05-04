@@ -6,14 +6,13 @@ READ_WORDS_RAM_READ => read_ram_request
 READ_RAM_REQUEST => o_done_signal ? done : read_ram
 READ_RAM => serialize
         
-SERIALIZE => ser_done ? serialize : load_from_par
+SERIALIZE => ser_done ? load_from_par : serialize
 
 LOAD_FROM_PAR => write_ram_1        
 WRITE_RAM_1 => write_ram_2
 WRITE_RAM_2 => write_ram_wait
 WRITE_RAM_WAIT => read_ram_request
         
-
 DONE => i_start ? done : reset
 
 

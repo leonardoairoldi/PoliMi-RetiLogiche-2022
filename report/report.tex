@@ -17,13 +17,14 @@
 \usepackage{caption}
 \usepackage{tikz}
 \usepackage{pdfpages}
+\usepackage{graphicx}
 \usepackage[hidelinks]{hyperref}
 
 \usetikzlibrary{arrows,automata, positioning}
 \tikzset{
   ->, % makes the edges directed
   >=stealth', % makes the arrow heads bold
-  node distance=4cm, % specifies the minimum distance between two nodes. Change if necessary.
+  node distance=4.1cm, % specifies the minimum distance between two nodes. Change if necessary.
   every state/.style={thick, fill=gray!10}, % sets the properties for each ’state’ node
   initial text=$ $, % sets the text that appears on the start arrow
 }
@@ -164,50 +165,67 @@ Il mux seleziona di default il contenuto del registro \textit{count} usato in le
 \section{Macchina a stati}
 Il progetto è tutto contenuto all'interno della entity Vivado \textbf{project\_reti\_logiche}. Questa contiene al suo interno tutti i \textbf{components} del dispositivo (serializer, convolutor, parallelizer e datapath) e implementa tramite tre \textbf{process} (\textit{FSM\_STATE\_CHANGE, FSM\_FLOW, FSM\_OUT}). Questa FSM permette di controllare il flusso d'esecuzione di tutto il dispositivo portando i segnali di controllo ai valori corretti in base allo stato in cui ci si trova.
 
-\begin{figure}[ht] % ’ht’ tells LaTeX to place the figure ’here’ or at the top of the page
+\subsection{Elenco delle transizioni}
+Segue un elenco delle transizioni. Vedi figura \ref{fig:FSM Flow}
+\begin{verbatim}
+RESET                   => i_start            ? READ_WORD_RAM_REQUEST : RESET
+READ_WORDS_RAM_REQUEST  => READ_WORDS_RAM_READ
+READ_WORDS_RAM_READ     => READ_RAM_REQUEST
+READ_RAM_REQUEST        => o_done_signal      ? DONE : READ_RAM
+READ_RAM                => SERIALIZE
+SERIALIZE               => ser_done           ? LOAD_FROM_PAR : SERIALIZE
+LOAD_FROM_PAR           => WRITE_RAM_1        
+WRITE_RAM_1             => WRITE_RAM_2
+WRITE_RAM_2             => WRITE_RAM_WAIT
+WRITE_RAM_WAIT          => READ_RAM_REQUEST
+DONE                    => i_start            ? DONE : RESET
+\end{verbatim}
+
+
+\begin{figure}[h] % ’ht’ tells LaTeX to place the figure ’here’ or at the top of the page
+  \newpage
   \centering % centers the figure
-  \begin{tikzpicture} [state/.style={circle, draw, minimum size=2cm, thick, font=\tiny, fill=gray!10}]
+  \begin{tikzpicture} [state/.style={circle, draw, minimum size=2.3cm, thick, font=\small, fill=gray!10}]
     \node[state, initial] (RESET) {$RESET$};
     \node[state, right of=RESET] (READ_WORDS_RAM_REQUEST) {$RWR\_REQ$};
     \node[state, right of=READ_WORDS_RAM_REQUEST] (READ_WORDS_RAM_READ) {$RWR\_READ$};
     \node[state, below of=READ_WORDS_RAM_READ] (READ_RAM_REQUEST) {$RR\_REQ$};
-    \node[state, left of=READ_RAM_REQUEST] (READ_RAM) {$READ\_RAM$};
+    \node[state, below of=READ_RAM_REQUEST] (READ_RAM) {$READ\_RAM$};
     \node[state, below of=READ_RAM] (SERIALIZE) {$SERIALIZE$};
-    \node[state, right of=SERIALIZE] (LOAD_FROM_PAR) {$LOAD\_PAR$};
-    \node[state, below of=LOAD_FROM_PAR] (WRITE_RAM_1) {$WRAM\_1$};
-    \node[state, below of=WRITE_RAM_1] (WRITE_RAM_2) {$WRAM\_2$};
-    \node[state, left of=WRITE_RAM_2] (WRITE_RAM_WAIT) {$WR\_WAIT$};
-    \node[state, left of=WRITE_RAM_WAIT] (DONE) {$DONE$};
+    \node[state, below of=SERIALIZE] (LOAD_FROM_PAR) {$LOAD\_PAR$};
+    \node[state, left of=LOAD_FROM_PAR] (WRITE_RAM_1) {$WRAM\_1$};
+    \node[state, left of=WRITE_RAM_1] (WRITE_RAM_2) {$WRAM\_2$};
+    \node[state, above of=WRITE_RAM_2] (WRITE_RAM_WAIT) {$WR\_WAIT$};
+    \node[state, below of=RESET] (DONE) {$DONE$};
     
-    \draw (RESET) edge[loop above] node{$start = 0$} (RESET)
-          (RESET) edge[above] node{$start = 1$} (READ_WORDS_RAM_REQUEST)
+    \draw (RESET) edge[loop above] node{$i\_start = 0$} (RESET)
+          (RESET) edge[above] node{$i\_start = 1$} (READ_WORDS_RAM_REQUEST)
           
           (READ_WORDS_RAM_REQUEST) edge[above] node{} (READ_WORDS_RAM_READ)
           (READ_WORDS_RAM_READ) edge[above] node{} (READ_RAM_REQUEST)
 
-          (READ_RAM_REQUEST) edge[bend right=38] node {$o\_done\_signal = 1$} (DONE)
-          (READ_RAM_REQUEST) edge[above] node{$o\_done\_signal = 0$} (READ_RAM)
+          (READ_RAM_REQUEST) edge[above] node {$o\_done\_signal = 1$} (DONE)
+          (READ_RAM_REQUEST) edge[above] node[right]{$o\_done\_signal = 0$} (READ_RAM)
 
           (READ_RAM) edge[above] node{} (SERIALIZE)
 
-          (SERIALIZE) edge[loop below] node{$ser\_done = 0$} (SERIALIZE)
-          (SERIALIZE) edge[above] node{$ser\_done = 1$} (LOAD_FROM_PAR)
+          (SERIALIZE) edge[loop left] node{$ser\_done = 0$} (SERIALIZE)
+          (SERIALIZE) edge[above] node[right]{$ser\_done = 1$} (LOAD_FROM_PAR)
 
           (LOAD_FROM_PAR) edge[above] node{} (WRITE_RAM_1)
           (WRITE_RAM_1) edge[above] node{} (WRITE_RAM_2)
           (WRITE_RAM_2) edge[above] node{} (WRITE_RAM_WAIT)
-          (WRITE_RAM_WAIT) edge[above] node{} (READ_RAM_REQUEST)
+          (WRITE_RAM_WAIT) edge[bend left] node{} (READ_RAM_REQUEST)
 
-          (DONE) edge[loop left] node{$start=1$} (DONE)
-          (DONE) edge[above] node{$start=0$} (RESET)
+          (DONE) edge[loop left] node{$i\_start=1$} (DONE)
+          (DONE) edge[above] node[left]{$i\_start=0$} (RESET)
           ;
   \end{tikzpicture}
-  \caption{Caption of the FSM}
-  \label{fig:my_label}
-  \end{figure}
-\begin{tikzpicture}
-  
-\end{tikzpicture}
+  \caption{FSM Flow}
+  \label{fig:FSM Flow}
+\end{figure}
+
+ 
 
 %----------------------------------------------------------------------------------------
 %	RISULTATI SPERIMENTALI
