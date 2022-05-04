@@ -18,6 +18,7 @@
 \usepackage{tikz}
 \usepackage{pdfpages}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage[hidelinks]{hyperref}
 
 \usetikzlibrary{arrows,automata, positioning}
@@ -225,7 +226,305 @@ DONE                    => i_start            ? DONE : RESET
   \label{fig:FSM Flow}
 \end{figure}
 
- 
+\subsection{Descrizione degli stati}
+La macchina a stati è modellata come una macchina di Moore. I segnali di controllo sono dipendenti solamente dallo stato corrente della macchina. In seguito sono elencate le uscite dei segnali di controllo per ogni stato. Di default tutti gli stati sono portati al livello logico basso.
+
+\subsubsection{RESET}
+Lo stato di reset corrisponde allo stato iniziale della macchina. La macchina torna in questo stato alla fine di una computazione quando è stato riabbassato il segnale di start o quando il segnale di reset è portato a 1.
+
+In questo stato si azzera il registro count degli indirizzi tramite un multiplexer e si azzera lo stato del convolutore, riportandolo nello stato iniziale in modo da poter iniziare una elaborazione sempre con il convolutore azzerato anche in caso di multiple elaborazioni in sequenza.
+
+Si esce dallo stato di reset non appena una nuova elaborazione è richiesta tramite il segnale di start.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{||c | c||} 
+    \hline
+    Signal & Value \\
+    \hline\hline
+    reg\_in\_load & 0 \\
+    reg\_out\_load & 0 \\
+    reg\_words\_load & 0 \\
+    \textbf{reg\_count\_load} & \textbf{1} \\
+    \textbf{mux\_count\_rst} & \textbf{1} \\
+    mux\_rw\_addr\_sel & 00 \\
+    ser\_start & 0 \\
+    \textbf{conv\_reset} & \textbf{1} \\
+    par\_set\_out & 0 \\
+    o\_en & 0 \\
+    o\_we & 0 \\
+    o\_done & 0 \\
+   \hline
+  \end{tabular}
+  \caption{Uscite nello stato RESET.}
+  \label{table:1}
+\end{table}
+
+
+\subsubsection{READ\_WORDS\_RAM\_REQUEST}
+Nello stato di READ\_WORDS\_RAM\_REQUEST si carica all'interno del registro words il numero di byte corrispondente alla lunghezza dello stream in input. Questo valore viene richiesto alla RAM in questo stato.
+\begin{table}[H]
+  \centering
+  \begin{tabular}{||c | c||} 
+    \hline
+    Signal & Value \\
+    \hline\hline
+    reg\_in\_load & 0 \\
+    reg\_out\_load & 0 \\
+    reg\_words\_load & 0 \\
+    reg\_count\_load & 0 \\
+    mux\_count\_rst & 0 \\
+    \textbf{mux\_rw\_addr\_sel} & \textbf{00} \\
+    ser\_start & 0 \\
+    conv\_reset & 0 \\
+    par\_set\_out & 0 \\
+    \textbf{o\_en} & \textbf{1} \\
+    o\_we & 0 \\
+    o\_done & 0 \\
+   \hline
+  \end{tabular}
+  \caption{Uscite nello stato READ\_WORDS\_RAM\_REQUEST.}
+  \label{table:2}
+\end{table}
+
+\subsubsection{READ\_WORDS\_RAM\_READ}
+Essendo la memoria sincrona, essa rilasia il dato richiesto al ciclo di clock precedente solamente durante quello successivo. In questo stato, raggiunto nel ciclo di clock immediatamente successivo al ciclo dello stato READ\_WORDS\_RAM\_REQUEST, si carica il valore recuperato dalla RAM all'interno del registro \textit{words}.
+\begin{table}[H]
+  \centering
+  \begin{tabular}{||c | c||} 
+    \hline
+    Signal & Value \\
+    \hline\hline
+    reg\_in\_load & 0 \\
+    reg\_out\_load & 0 \\
+    \textbf{reg\_words\_load} & \textbf{1} \\
+    \textbf{reg\_count\_load} & \textbf{1} \\
+    mux\_count\_rst & 0 \\
+    mux\_rw\_addr\_sel & 00 \\
+    ser\_start & 0 \\
+    conv\_reset & 0 \\
+    par\_set\_out & 0 \\
+    o\_en & 0 \\
+    o\_we & 0 \\
+    o\_done & 0 \\
+   \hline
+  \end{tabular}
+  \caption{Uscite nello stato READ\_WORDS\_RAM\_READ.}
+  \label{table:3}
+\end{table}
+
+\subsubsection{READ\_RAM\_REQUEST}
+READ\_RAM\_REQUEST è lo stato che richiede alla memoria RAM il byte dello stream da leggere per proseguire con l'elaborazione. Per questo utilizza il mux di selettore indirizzo a 00 in modo da andare a leggere dall'indirizzo di lettura già contenuto nel registro di count. 
+
+Oltre all'interrogaizone della RAM lo stato effettua una funzione di controllo: se dal datapth arriva il segnale \textit{o\_done\_signal} il prossimo stato non sarà quello di caricamento nel registro in della parola letta dalla memoria ma lo stato di DONE, dove viene notificata la fine dell'elaborazione.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{||c | c||} 
+    \hline
+    Signal & Value \\
+    \hline\hline
+    reg\_in\_load & 0 \\
+    reg\_out\_load & 0 \\
+    reg\_words\_load & 0 \\
+    reg\_count\_load & 0 \\
+    mux\_count\_rst & 0 \\
+    \textbf{mux\_rw\_addr\_sel} & \textbf{00} \\
+    ser\_start & 0 \\
+    conv\_reset & 0 \\
+    par\_set\_out & 0 \\
+    \textbf{o\_en} & \textbf{1} \\
+    o\_we & 0 \\
+    o\_done & 0 \\
+   \hline
+  \end{tabular}
+  \caption{Uscite nello stato READ\_RAM\_REQUEST.}
+  \label{table:4}
+\end{table}
+
+\subsubsection{READ\_RAM}
+In questo stato il byte dello stream richiesto al ciclo precedente viene letto e caricato all'interno del registro \textit{reg\_in}. Inoltre è alzato il segnale di start del serializzatore in modo da far partire l'elaborazione nel ciclo successivo.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{||c | c||} 
+    \hline
+    Signal & Value \\
+    \hline\hline
+    \textbf{reg\_in\_load} & \textbf{1} \\
+    reg\_out\_load & 0 \\
+    reg\_words\_load & 0 \\
+    reg\_count\_load & 0 \\
+    mux\_count\_rst & 0 \\
+    mux\_rw\_addr\_sel & 00 \\
+    \textbf{ser\_start} & \textbf{1} \\
+    conv\_reset & 0 \\
+    par\_set\_out & 0 \\
+    o\_en & 0 \\
+    o\_we & 0 \\
+    o\_done & 0 \\
+   \hline
+  \end{tabular}
+  \caption{Uscite nello stato READ\_RAM.}
+  \label{table:5}
+\end{table}
+
+\subsubsection{SERIALIZE}
+Nello stato serialize avviene tutto il calcolo della convoluzione del byte presente all'interno del registro \textit{reg\_in}. Il serializzatore continua finchè non ha serializzato tutto il registro \textit{reg\_in}, quando alzerà il segnale \textit{ser\_done}, che mette in pausa il convolutore. Il parallelizzatore, partito anch'esso con il segnale di \textit{ser\_start} sarà valido alla fine della convoluzione del byte. Quando il segnale di \textit{ser\_done} è alzato dopo 16 cicli di clock si passa alla sezione di caricamento in RAM.
+\begin{table}[H]
+  \centering
+  \begin{tabular}{||c | c||} 
+    \hline
+    Signal & Value \\
+    \hline\hline
+    reg\_in\_load & 0 \\
+    reg\_out\_load & 0 \\
+    reg\_words\_load & 0 \\
+    reg\_count\_load & 0 \\
+    mux\_count\_rst & 0 \\
+    mux\_rw\_addr\_sel & 00 \\
+    ser\_start & 0 \\
+    conv\_reset & 0 \\
+    par\_set\_out & 0 \\
+    o\_en & 0 \\
+    o\_we & 0 \\
+    o\_done & 0 \\
+   \hline
+  \end{tabular}
+  \caption{Uscite nello stato SERIALIZE.}
+  \label{table:6}
+\end{table}
+
+\subsubsection{LOAD\_FROM\_PAR}
+In questo stato si carica dal registro interno del parallelizzatore al registro di uscita \textit{reg\_out} il primo byte da scrivere in memoria. Il byte corretto viene selezionato mandando al parallelizzatore il bit di comando del suo mux di uscita. Il primo byte viene selezionato con il segnale 0.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{||c | c||} 
+    \hline
+    Signal & Value \\
+    \hline\hline
+    reg\_in\_load & 0 \\
+    \textbf{reg\_out\_load} & \textbf{1} \\
+    reg\_words\_load & 0 \\
+    reg\_count\_load & 0 \\
+    mux\_count\_rst & 0 \\
+    mux\_rw\_addr\_sel & 00 \\
+    ser\_start & 0 \\
+    conv\_reset & 0 \\
+    \textbf{par\_set\_out} & \textbf{0} \\
+    o\_en & 0 \\
+    o\_we & 0 \\
+    o\_done & 0 \\
+   \hline
+  \end{tabular}
+  \caption{Uscite nello stato LOAD\_FROM\_PAR.}
+  \label{table:7}
+\end{table}
+
+\subsubsection{WRITE\_RAM\_1}
+Nel primo stato di scrittura viene richiesta alla RAM la scrittura del primo byte, presente già nel registro di uscita. Questo viene scrito all'indirizzo selezionato con il mux di indirizzo a 01. Inoltre sempre durante questo stato viene richiesto il caricamento del secondo byte in ingresso nel registro di out, in modo da averlo già caricato per il successivo ciclo di clock e richiedere già la sua scrittura.
+\begin{table}[H]
+  \centering
+  \begin{tabular}{||c | c||} 
+    \hline
+    Signal & Value \\
+    \hline\hline
+    reg\_in\_load & 0 \\
+    \textbf{reg\_out\_load} & \textbf{1} \\
+    reg\_words\_load & 0 \\
+    reg\_count\_load & 0 \\
+    mux\_count\_rst & 0 \\
+    \textbf{mux\_rw\_addr\_sel} & \textbf{01} \\
+    ser\_start & 0 \\
+    conv\_reset & 0 \\
+    \textbf{par\_set\_out} & \textbf{1} \\
+    \textbf{o\_en} & \textbf{1} \\
+    \textbf{o\_we} & \textbf{1} \\
+    o\_done & 0 \\
+   \hline
+  \end{tabular}
+  \caption{Uscite nello stato WRITE\_RAM\_1.}
+  \label{table:8}
+\end{table}
+
+\subsubsection{WRITE\_RAM\_2}
+In questo stato, come nel precedente, viene richiesta la scrittura del registro di output, che in questo ciclo di clock avrà caricato il secondo byte presente nel parallelizzatore. Per il secondo byte viene scelto l'indirizzo selezionato 10 dal mux degli indirizzi.
+\begin{table}[H]
+  \centering
+  \begin{tabular}{||c | c||} 
+    \hline
+    Signal & Value \\
+    \hline\hline
+    reg\_in\_load & 0 \\
+    reg\_out\_load & 0 \\
+    reg\_words\_load & 0 \\
+    reg\_count\_load & 0 \\
+    mux\_count\_rst & 0 \\
+    \textbf{mux\_rw\_addr\_sel} & \textbf{10} \\
+    ser\_start & 0 \\
+    conv\_reset & 0 \\
+    par\_set\_out & 0 \\
+    \textbf{o\_en} & \textbf{1} \\
+    \textbf{o\_we} & \textbf{1} \\
+    o\_done & 0 \\
+   \hline
+  \end{tabular}
+  \caption{Uscite nello stato WRITE\_RAM\_2.}
+  \label{table:9}
+\end{table}
+
+\subsubsection{WRITE\_RAM\_WAIT}
+Durante questo ciclo di clock la RAM sta completando il caricamento del secondo byte dello stream di uscita. Con questo stato di attesa si aspetta in modo da avere una RAM valida già in uscita da questo stato. Inoltre si incrementa il counter degli indirizzi in modo che il prossimo stato (READ\_RAM\_REQUEST) abbia il contatore aggiornato e possa svolgere la verifica dello stato dell'elaborazione.
+\begin{table}[H]
+  \centering
+  \begin{tabular}{||c | c||} 
+    \hline
+    Signal & Value \\
+    \hline\hline
+    reg\_in\_load & 0 \\
+    reg\_out\_load & 0 \\
+    reg\_words\_load & 0 \\
+    \textbf{reg\_count\_load} & \textbf{1} \\
+    mux\_count\_rst & 0 \\
+    mux\_rw\_addr\_sel & 00 \\
+    ser\_start & 0 \\
+    conv\_reset & 0 \\
+    par\_set\_out & 0 \\
+    o\_en & 0 \\
+    o\_we & 0 \\
+    o\_done & 0 \\
+   \hline
+  \end{tabular}
+  \caption{Uscite nello stato WRITE\_RAM\_WAIT.}
+  \label{table:10}
+\end{table}
+
+\subsubsection{DONE}
+Questo è lo stato di fine elaborazione. Esso porta il segnale \textit{o\_done} a alto. Si resta in questo stato fintantochè il segnale di start non viene riabbassato dall'utente. A quel punto la macchina tornerà nello stati iniziale (RESET) abbassando il segnale di done e rendendolo prondo per una nuova elaborazione, come da specifica.
+\begin{table}[H]
+  \centering
+  \begin{tabular}{||c | c||} 
+    \hline
+    Signal & Value \\
+    \hline\hline
+    reg\_in\_load & 0 \\
+    reg\_out\_load & 0 \\
+    reg\_words\_load & 0 \\
+    reg\_count\_load & 0 \\
+    mux\_count\_rst & 0 \\
+    mux\_rw\_addr\_sel & 00 \\
+    ser\_start & 0 \\
+    conv\_reset & 0 \\
+    par\_set\_out & 0 \\
+    o\_en & 0 \\
+    o\_we & 0 \\
+    \textbf{o\_done} & \textbf{1} \\
+   \hline
+  \end{tabular}
+  \caption{Uscite nello stato DONE.}
+  \label{table:11}
+\end{table}
 
 %----------------------------------------------------------------------------------------
 %	RISULTATI SPERIMENTALI
