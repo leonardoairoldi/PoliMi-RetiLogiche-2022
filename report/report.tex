@@ -136,6 +136,8 @@ RAM Expected output
 [1004] 13     [1005] 40
 \end{verbatim}
 
+L'esecuzione di questo testbench verrà analizzata nella sezione \autoref{chap:Risultati sperimentali}.
+
 %----------------------------------------------------------------------------------------
 %	ARCHITETTURA
 %----------------------------------------------------------------------------------------
@@ -585,6 +587,7 @@ Questo è lo stato di fine elaborazione. Esso porta il segnale \textit{o\_done} 
 %----------------------------------------------------------------------------------------
 
 \chapter{Risultati sperimentali}
+\label{chap:Risultati sperimentali}
 Il dispositivo progettato è stato sintetizzato e testato con il tool Vivado di Xilinx. Vengono riportate ora le analisi sugli aspetti di sintesi del dispositivo e sui test effettuati su di esso.
 
 \section{Sintesi}
@@ -636,6 +639,14 @@ Slack (MET) :             95.783ns  (required time - arrival time)
 
 Si può notare come lo \textbf{slack} (parametro che indica il tempo tra il delay massimo della logica combinatoria e il prossimo rising-edge del ciclo di clock) sia particolarmente elevato. Questo a grazie al delay della logica combinatoria (\textbf{4.066ns}) che risulta più di un ordine di grandezza inferiore al periodo del ciclo di clock (100ns).
 Questo dato indica quindi che la scheda sarebbe in grado di girare a 10 volte la velocità attuale, ovvero con un ciclo di clock di periodo 10ns (100Mhz).
+
+\newpage
+\section{Analisi esecuzione esempio}
+
+\includegraphics[scale = 0.25]{schematics/Caricamento words.png}\\
+\includegraphics[scale = 0.25]{schematics/Caricamento in ram.png}\\
+\includegraphics[scale = 0.25]{schematics/Byte elabora.png}
+
 
 %----------------------------------------------------------------------------------------
 %	CONCLUSIONE
