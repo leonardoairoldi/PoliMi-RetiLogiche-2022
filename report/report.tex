@@ -83,8 +83,58 @@ Per la simulazione e la sintesi della scheda il software utilizzato è \textbf{X
 Il dispositivo sarà poi implementato su una \textbf{FPGA Artix 7 \texttt{xc7a200tfbg484-1}}.
 
 \section{Esempio}
+Si prenda in analisi un caso di utilizzo caratterizzato da 3 elaborazioni richieste alla macchina in sequenza, dove la seconda è avviata a 1000ns dal termine della prima tramite il segnale \textit{start} e la terza viene interrotta dopo un \textit{reset} del dispositivo e riavviata.
 
+Il circuito deve essere in grado di elaborare correttamente tutti i 3 i segnali presenti nella RAM durante le 3 elaborazioni, partendo solamente dopo il segnale di start e segnalando la fine di ciascuna con un segnale di \textit{done}, mantenuto alzato fino a che il segnale di start non è riportato a 0.
 
+\subsubsection{Elaborazione 1}
+Prima di ogni primo utilizzo il reset della macchina è alzato. In questo caso viene alzato per 100ns e dopo altri 100ns di attesa viene richiesto lo start dell'elaborazione. Questa elaborazione consiste in uno stream di solo 2 byte. Al termine di questa elaborazione lo start viene abbassato solo 500ns dopo la segnalazione di done da parte della macchina. \textit{done} dovrà dunque rimanere 1.
+\begin{verbatim}
+RAM Input data
+[0] 2
+[1] 162
+[2] 75
+
+RAM Expected output
+[1000] 209    [1001] 205
+[1002] 247    [1003] 210
+\end{verbatim}
+
+\subsubsection{Elaborazione 2}
+Dopo la prima elaborazione vengono lasciati 1000ns di attesa, dopo i quali viene segnalato un nuovo start. In questa elaborazione viene computato uno stream di 6 byte.
+\begin{verbatim}
+RAM Input data
+[0] 6
+[1] 163
+[2] 47
+[3] 4
+[4] 64
+[5] 67
+[6] 13
+  
+RAM Expected output
+[1000] 209    [1001] 206
+[1002] 189    [1003] 37
+[1004] 176    [1005] 55
+[1006] 55     [1007] 0
+[1008] 55     [1009] 14
+[1010] 176    [1011] 232
+\end{verbatim}
+
+\subsubsection{Elaborazione 3}
+La terza elaborazione comuncia 100ns dopo la prima ma a 500ns dalla partenza, il segnale di reset si alza per 10ns. La macchina dovrebbe comportarsi correttamente e resettare il proprio stato. Un nuovo segnale di start viene quindi dato 500 ns dopo il reset: a questo punto l'elaborazione dovrebbe ricominciare e terminare correttamente.
+\begin{verbatim}
+RAM Input data
+[0] 3
+[1] 112
+[2] 164
+[3] 45
+  
+RAM Expected output
+[1000] 57     [1001] 176
+[1002] 209    [1003] 247
+[1004] 13     [1005] 40
+\end{verbatim}
 
 %----------------------------------------------------------------------------------------
 %	ARCHITETTURA
