@@ -643,16 +643,48 @@ Questo dato indica quindi che la scheda sarebbe in grado di girare a 10 volte la
 \newpage
 \section{Analisi esecuzione esempio}
 
-\includegraphics[scale = 0.25]{schematics/Caricamento words.png}\\
-\includegraphics[scale = 0.25]{schematics/Caricamento in ram.png}\\
-\includegraphics[scale = 0.25]{schematics/Byte elabora.png}
+\begin{figure}[H]
+  \centering
+  \label{fig:Caricamento words}
+  \includegraphics[scale = 0.25]{schematics/Caricamento words.png}
+  \caption{Avvio dell'elaborazione e caricamento del registro words.}
+\end{figure}
 
+\begin{figure}[H]
+  \centering
+  \label{fig:Convoluzione}
+  \includegraphics[scale = 0.25]{schematics/Byte elabora.png}
+  \caption{Elaborazione di un byte dello stream di ingresso.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \label{fig:Caricamento ram}
+  \includegraphics[scale = 0.25]{schematics/Caricamento in ram.png}
+  \caption{Caricamento in RAM di un byte elaborato.}
+\end{figure}
+
+\section{Testing}
+Il dispositivo è stato testato con vari testbench e simulando casi di escuzione reale. E' stata inoltre posta particolare attenzione nel testare vari \textit{corner cases}, ovvero elaborazioni che contengono parametri limite (come per esempio avere uno stream di 0 o 255 parole) o situazioni irregolari in cui la macchina, se non progettata correttamente, potrebbe comportarsi in modo differente dal previsto.
+
+E' stato provato anche un test che potrebbe simulare un caso di utilizzo reale del dispositivo. In questa elaborazione sono mandati in input sequenzialmente 1024 test da 255 byte l'uno. Questo potrebbe simulare l'uso di questo convolutore in un circuito che effettivamente deve convertire un flusso molto lungo e interfacciandosi al dispositivo attraverso una memoria RAM.
+Il risultato è stato un tempo di esecuzione totale di circa \textit{600ms}
+Da questo dato possiamo calcolare il throughput del circuito integrato.
+
+\[
+	Throughput = \frac{input data}{computing time} = \frac{1024 * 255B}{600ms} = 435kB/s = 3.48Mbps
+\]
+
+  Tenendo in conto che questo risultato è fortemente influenzato dalla frequenza di clock (10Mhz), e considerando che il clock potrebbe essere spinto anche fino a 10 volte quello attuale, il dispositivo sembra possedere delle caratteristiche sufficienti anche per delle \textit{real world usages}.
 
 %----------------------------------------------------------------------------------------
 %	CONCLUSIONE
 %----------------------------------------------------------------------------------------
 
 \chapter{Conclusione}
-
+Considerando che ho cercato di progettare questo dispositivo nella maniera più pulita possibilem cercando di usare le best practice per la programmazione in Vivado e cercando di progettare il dispositivo in modo che presenti delle componenti al suo interno riutilizzabili.
+Questo ha facilitato lo sviluppo del progetto in quanto il testing poteva essere effettuato sin dall'inizio sui singoli moduli.
+Inoltre i test dei corner case hanno permesso anche di individuare una falla di progettazione che mi ha permesso di rivedere e correggere l'archittura del dispositivo.
+La progettaizone quindi è stato un processo lento e ragionato bene dall'inizio per avere una base solida ma è comunque stato in costante evoluzione durate lo sviluppo.
 
 \end{document}
