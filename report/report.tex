@@ -20,6 +20,9 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+
+\setlength{\parindent}{0pt}
 
 \usetikzlibrary{arrows,automata, positioning}
 \tikzset{
@@ -41,6 +44,7 @@
 \date{A. A. 2021-22}
 
 \begin{document}
+
 \maketitle % Insert the title, author and date
 
 
@@ -61,7 +65,8 @@
 \chapter{Introduzione}
 
 
-La specifica della Prova finale (Progetto di Reti Logiche) 2021 richiede di implementare un \textbf{codificatore convoluzionale} usando il linguaggio VHDL.\\
+La specifica della Prova finale (Progetto di Reti Logiche) A. A. 2021-22 richiede di implementare un \textbf{codificatore convoluzionale} usando il linguaggio VHDL.
+
 Un codificatore convoluzionale è un dispositivo che tramite l'applicazione di un \textit{codice convoluzionale} codifica uno stream di bit in ingresso in uno stream di bit in uscita ridondante che permette a un dispositivo che legge lo stream codificato di risalire allo stream originale anche in presenza di errori applicando tecniche di \textit{error-correction}.
 Codificatori convoluzionali elettronici sono molto comuni nell'ambito delle telecomunicazioni, in quanto conferiscono a una rete un certo grado di robustezza: un dispositivo ricevente può ricostruire il segnale trasmesso, che potrebbe risultare corrotto a causa del rumore sulla linea, senza richiedere un ulteriore invio dell'informazione.
 
@@ -71,7 +76,7 @@ Nel caso specifico di questo progetto, è richiesto lo sviluppo di un circuito i
 \item il \textit{codice convoluzionale} ha \textbf{tasso di trasmissione} $\frac{1} {2}$.
 \item si interfaccia con una memoria sincrona a word di 8bit e indirizzi a 16bit.
 \item lo stream in ingresso è di dimensione $n$ words memorizzate a partire dall'indirizzo \texttt{0x01}.
-\item la dimensione dello stream è memorizzata all'indirizzo \texttt{0x00} ed è al massimo di 255 word.
+\item la dimensione dello stream è memorizzata all'indirizzo \texttt{0x00} ed è al massimo di 255 words.
 \item il dispositivo viene sempre inizializzato con un segnale di \texttt{reset}.
 \item la computazione inizia al segnale di \texttt{start} e termina quando il dispositivo alza il segnale \texttt{done}. Il dispositivo deve essere in grado di gestire computazioni successive senza aver bisogno di un segnale di \texttt{reset}. Si presuppone che il segnale di \texttt{start} rimanga alto durante tutta la computazione e che non possa essere rialzato prima che il segnale di \texttt{done} sia stato riportato a \texttt{0}.
 \item il dispositivo deve funzionare con un periodo di clock di almeno \texttt{100ns}
@@ -80,15 +85,15 @@ Nel caso specifico di questo progetto, è richiesto lo sviluppo di un circuito i
 \section{Strumenti}
 Il progetto sarà sviluppato in \textbf{VHDL} (VHSIC Hardware Description Language) che permette di descrivere circuiti integrati.
 Per la simulazione e la sintesi della scheda il software utilizzato è \textbf{Xilinx Vivado} (\textit{v2021.1}).
-Il dispositivo sarà poi implementato su una \textbf{FPGA Artix 7 \texttt{xc7a200tfbg484-1}}.
+Il circuito sarà poi implementato su una \textbf{FPGA Artix 7 \texttt{xc7a200tfbg484-1}}.
 
 \section{Esempio}
 Si prenda in analisi un caso di utilizzo caratterizzato da 3 elaborazioni richieste alla macchina in sequenza, dove la seconda è avviata a 1000ns dal termine della prima tramite il segnale \textit{start} e la terza viene interrotta dopo un \textit{reset} del dispositivo e riavviata.
 
-Il circuito deve essere in grado di elaborare correttamente tutti i 3 i segnali presenti nella RAM durante le 3 elaborazioni, partendo solamente dopo il segnale di start e segnalando la fine di ciascuna con un segnale di \textit{done}, mantenuto alzato fino a che il segnale di start non è riportato a 0.
+Il circuito deve essere in grado di elaborare correttamente tutti i 3 i segnali presenti nella RAM durante le 3 elaborazioni, partendo solamente dopo il segnale di \textit{start} e segnalando la fine di ciascuna con un segnale di \textit{done}, mantenuto alzato fino a che il segnale di \textit{start} non è riportato a 0.
 
 \subsubsection{Elaborazione 1}
-Prima di ogni primo utilizzo il reset della macchina è alzato. In questo caso viene alzato per 100ns e dopo altri 100ns di attesa viene richiesto lo start dell'elaborazione. Questa elaborazione consiste in uno stream di solo 2 byte. Al termine di questa elaborazione lo start viene abbassato solo 500ns dopo la segnalazione di done da parte della macchina. \textit{done} dovrà dunque rimanere 1.
+Prima di ogni primo utilizzo il \textit{reset} della macchina è alzato. In questo caso viene alzato per 100ns e dopo altri 100ns di attesa viene richiesto lo \textit{start} dell'elaborazione. Questa elaborazione consiste in uno stream di solo 2 byte. Al termine di questa elaborazione lo \textit{start} viene abbassato solo 500ns dopo la segnalazione di \textit{done} da parte della macchina. \textit{done} dovrà dunque rimanere 1.
 \begin{verbatim}
 RAM Input data
 [0] 2
@@ -101,7 +106,7 @@ RAM Expected output
 \end{verbatim}
 
 \subsubsection{Elaborazione 2}
-Dopo la prima elaborazione vengono lasciati 1000ns di attesa, dopo i quali viene segnalato un nuovo start. In questa elaborazione viene computato uno stream di 6 byte.
+Dopo la prima elaborazione vengono lasciati 1000ns di attesa, dopo i quali viene segnalato un nuovo \textit{start}. In questa elaborazione viene computato uno stream di 6 byte.
 \begin{verbatim}
 RAM Input data
 [0] 6
@@ -122,7 +127,7 @@ RAM Expected output
 \end{verbatim}
 
 \subsubsection{Elaborazione 3}
-La terza elaborazione comuncia 100ns dopo la prima ma a 500ns dalla partenza, il segnale di reset si alza per 10ns. La macchina dovrebbe comportarsi correttamente e resettare il proprio stato. Un nuovo segnale di start viene quindi dato 500 ns dopo il reset: a questo punto l'elaborazione dovrebbe ricominciare e terminare correttamente.
+La terza elaborazione comuncia 100ns dopo la prima ma a 500ns dalla partenza, il segnale di \textit{reset} si alza per 10ns. La macchina dovrebbe comportarsi correttamente e resettare il proprio stato. Un nuovo segnale di \textit{start} viene quindi dato 500 ns dopo il \textit{reset}: a questo punto l'elaborazione dovrebbe ricominciare e terminare correttamente.
 \begin{verbatim}
 RAM Input data
 [0] 3
@@ -136,7 +141,7 @@ RAM Expected output
 [1004] 13     [1005] 40
 \end{verbatim}
 
-L'esecuzione di questo testbench verrà analizzata nella sezione \autoref{chap:Risultati sperimentali}.
+L'esecuzione di questo testbench verrà analizzata nel \autoref{chap:Risultati sperimentali}.
 
 %----------------------------------------------------------------------------------------
 %	ARCHITETTURA
@@ -612,6 +617,7 @@ Il report di sintesi riassume l'elenco dei componenti della FPGA utilizzati per 
 
 Si può notare come tutti i registri utilizzati siano    \textbf{sincroni} (flip flop).
 
+\newpage
 \subsection{Timing}
 Il report di timing riassume i parametri della scheda in relazione al segnale di clock
 
@@ -682,9 +688,9 @@ Da questo dato possiamo calcolare il throughput del circuito integrato.
 %----------------------------------------------------------------------------------------
 
 \chapter{Conclusione}
-Considerando che ho cercato di progettare questo dispositivo nella maniera più pulita possibilem cercando di usare le best practice per la programmazione in Vivado e cercando di progettare il dispositivo in modo che presenti delle componenti al suo interno riutilizzabili.
-Questo ha facilitato lo sviluppo del progetto in quanto il testing poteva essere effettuato sin dall'inizio sui singoli moduli.
-Inoltre i test dei corner case hanno permesso anche di individuare una falla di progettazione che mi ha permesso di rivedere e correggere l'archittura del dispositivo.
-La progettaizone quindi è stato un processo lento e ragionato bene dall'inizio per avere una base solida ma è comunque stato in costante evoluzione durate lo sviluppo.
+I test effettuati tramite testbench hanno evidenziato come il componente si comporti rispettando le specifiche e gli obiettivi prefissati.
+L'intero progetto è stato sviluppato cercando di rendere il codice scritto il più chiaro possibile utilizzando pattern di programmazione VHDL e spezzando il dispositivo in sotto-moduli in modo da avere una chiara suddivisione delle funzionalità, aiutando nella progettazione dell'intera macchina, e in modo da avere codice riutilizzabile e facilmente interscambiabile con componenti di tipo diverso. Questo ha inoltre facilitato lo sviluppo del progetto in quanto il testing poteva essere effettuato sin dall'inizio sui singoli moduli.
+I test dei corner case hanno permesso anche di evidenziare una falla di progettazione che ha portato alla revisione e alla correzione di una parte dell'archittura del dispositivo.
 
+In conclusione il lavoro svolto è stato interessante poichè ha permesso di evidenziare le varie fasi di un progetto di un circuito integrato (progettazione, implementazione, testing, relazione) e si è mostrata una sfida da affrontare in un campo che vorrei approfondire.
 \end{document}
