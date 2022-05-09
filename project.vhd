@@ -20,28 +20,27 @@ end entity project_reti_logiche;
 architecture behavioral of project_reti_logiche is
     component datapath
     port(
-        -- global signals
+        -- Global signals
         i_clk           : in  std_logic;
         i_rst           : in  std_logic;
         i_data          : in  std_logic_vector(7 downto 0);
         o_address       : out std_logic_vector(15 downto 0);
         o_done_signal   : out std_logic;
         o_data          : out std_logic_vector(7 downto 0);
-        --control signals from the FSM
+        -- FSM control signals 
         reg_in_load     : in std_logic;
         reg_out_load    : in std_logic;
         reg_words_load  : in std_logic;
         reg_count_load  : in std_logic;
         mux_count_rst   : in std_logic;
         mux_rw_addr_sel : in std_logic_vector(1 downto 0);
-        
+        -- serializer signals
         to_ser_input : out std_logic_vector(7 downto 0);
         from_ser_output : in std_logic;
-        
-        --datapath signals of convolutor 
+        -- convolutor signals
         to_conv_input : out std_logic;
         from_conv_output : in std_logic;
-        --datapath signals of parallelizer
+        -- parallelizer signals
         to_par_input : out std_logic;
         from_par_output : in std_logic_vector(7 downto 0)
     );
@@ -75,7 +74,7 @@ architecture behavioral of project_reti_logiche is
         i_clk         : in  std_logic;
         i_rst         : in  std_logic;
         par_start     : in  std_logic;
-        par_set_out   : in  std_logic; -- '0' to output first word '1' output second
+        par_set_out   : in  std_logic;
         
         par_input     : in std_logic; 
         par_output    : out std_logic_vector(7 downto 0)
@@ -83,7 +82,7 @@ architecture behavioral of project_reti_logiche is
     end component;
             
     type fsm_state is (
-        RESET, -- resetta tutti i segnali e parte con una nuova operazione
+        RESET,
         
         READ_WORDS_RAM_REQUEST,
         READ_WORDS_RAM_READ,
@@ -103,7 +102,6 @@ architecture behavioral of project_reti_logiche is
     
     signal cur_state : fsm_state;
     signal next_state : fsm_state;
-    -- signal callback: fsm_state;
     
     
     
@@ -122,18 +120,16 @@ architecture behavioral of project_reti_logiche is
     signal ser_output : std_logic;
     -- Convolutor control signals
     signal conv_reset : std_logic;
-    --signal conv_pause : std_logic;
+  --signal conv_pause : std_logic;
     -- Convolutor data signals
     signal conv_input : std_logic;
     signal conv_output : std_logic;
     -- Parallelizer control signals
-    --signal par_start : std_logic;
+  --signal par_start : std_logic;
     signal par_set_out : std_logic;
     -- Parallelizer data signals 
     signal par_input : std_logic;
     signal par_output : std_logic_vector(7 downto 0);
-    
-    
     
     -- Done signal from datapath
     signal o_done_signal : std_logic;
@@ -166,13 +162,13 @@ begin
         par_output
     );
     
-    SERIALIZER0 : serializer port map( -- TODO
+    SERIALIZER0 : serializer port map(
         i_clk => i_clk,
         i_rst => i_rst,
         ser_start => ser_start,
         ser_done => ser_done,
-        ser_input => ser_input, -- input and output ports are connected to the datapath
-        ser_output => ser_output  -- WARNING: if i add a component at the datapath is another one istantiated or is this one (probabily another so don't work)
+        ser_input => ser_input,
+        ser_output => ser_output
     );
     
     CONVOLUTOR0 : convolutor port map(
@@ -205,13 +201,13 @@ begin
     
     FSM_FLOW : process(cur_state, i_start, i_data, o_done_signal, ser_done)
     begin
-        next_state <= cur_state; -- avoiding latches: default assign
+        next_state <= cur_state;
         case cur_state is
             when RESET =>
                 if i_start = '0' then
                     next_state <= RESET;
                 else 
-                    next_state <= READ_WORDS_RAM_REQUEST; -- starts with i_start = 1 and i_rst = 0. (Reset is considered in FSM_STATE_CHANGE)
+                    next_state <= READ_WORDS_RAM_REQUEST; 
                 end if;
                 
             when READ_WORDS_RAM_REQUEST =>
@@ -260,9 +256,6 @@ begin
     
     FSM_OUT : process(cur_state)
     begin
-        -- occhio a non modificare gli output del datapath
-        -- o_data
-        -- o_address (Ora è qui per debug, poi rimettilo in interfacce dataath)
         
         reg_in_load <= '0';
         reg_out_load <= '0';
@@ -274,15 +267,14 @@ begin
         conv_reset <= '0';
         par_set_out <= '0';
         
-        -- o_address <= "0000000000000000";
         o_en <= '0';
         o_we <= '0';
         o_done <= '0';
         
         case cur_state is
             when RESET =>
-                mux_count_rst <= '1'; -- load 0 into the reg_count to read ...
-                reg_count_load <= '1'; -- address [0]
+                mux_count_rst <= '1';
+                reg_count_load <= '1'; -- address = [0]
                 conv_reset <= '1';
                 
             when READ_WORDS_RAM_REQUEST =>
@@ -291,7 +283,7 @@ begin
                 
             when READ_WORDS_RAM_READ =>
                 reg_words_load <= '1';
-                reg_count_load <= '1'; -- prepare for first number read  (ram[1])
+                reg_count_load <= '1';
                 
                 
             when READ_RAM_REQUEST =>
@@ -303,7 +295,7 @@ begin
                 ser_start <= '1';
             
             when SERIALIZE =>
-                -- reg_out_load <= '';
+                
         
             when LOAD_FROM_PAR =>
                 par_set_out <= '0';
@@ -369,20 +361,20 @@ entity datapath is
         o_address     : out std_logic_vector(15 downto 0);
         o_done_signal : out std_logic;
         o_data        : out std_logic_vector(7 downto 0);
-        --control signals from the FSM
+        -- control signals from the FSM
         reg_in_load : in std_logic;
         reg_out_load : in std_logic;
         reg_words_load : in std_logic;
         reg_count_load : in std_logic;
         mux_count_rst : in std_logic;
         mux_rw_addr_sel : in std_logic_vector(1 downto 0);
-        --datapath signals of serializer
+        -- datapath signals of serializer
         to_ser_input : out std_logic_vector(7 downto 0);
         from_ser_output : in std_logic;
-        --datapath signals of convolutor 
+        -- datapath signals of convolutor 
         to_conv_input : out std_logic;
         from_conv_output : in std_logic;
-        --datapath signals of parallelizer
+        -- datapath signals of parallelizer
         to_par_input : out std_logic;
         from_par_output : in std_logic_vector(7 downto 0)
     );
@@ -494,6 +486,7 @@ end architecture behavioral;
 
 
 
+
 -- SERIALIZER
 
 library ieee;
@@ -508,7 +501,7 @@ entity serializer is
         ser_start     : in  std_logic;
         ser_done      : out std_logic;
         
-        ser_input     : in std_logic_vector(0 to 7); -- al contrario count incrementa e il primo da leggere è il MSB
+        ser_input     : in std_logic_vector(0 to 7); -- BACKWARDS: as count goes from 0 to 7 and the stream goes from MSB to LSB
         ser_output    : out std_logic        
     );
 end entity;
@@ -632,7 +625,7 @@ architecture behavioral of parallelizer is
     signal next_state : fsm_par_state;
     
     signal internal_reg_load : std_logic;
-    signal internal_registry : std_logic_vector(0 to 15); -- al contrario cosi i primi bit vengono messi in alto 
+    signal internal_registry : std_logic_vector(0 to 15); -- BACKWARDS same as serializer: counter goes from 0->15 and stream from MSB to LSB
     signal reg_count : std_logic_vector(3 downto 0);
 
 begin
@@ -740,7 +733,7 @@ end entity;
 
 architecture behavioral of convolutor is
 
-    type conv_state is ( -- the states are written with capital letter o and i
+    type conv_state is ( -- the states are written with capital letter o and i instead of 0 and 1
         OO_PK1,
         OO_PK2,
         OI_PK1,
