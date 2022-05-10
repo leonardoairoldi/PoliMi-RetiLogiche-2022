@@ -223,7 +223,7 @@ Il mux seleziona di default il contenuto del registro \textit{count} usato in le
 \includegraphics[scale = 0.45]{schematics/datapath.pdf}
 
 \section{Macchina a stati}
-Il progetto è tutto contenuto all'interno della entity Vivado \textbf{project\_reti\_logiche}. Questa contiene al suo interno tutti i \textbf{components} del dispositivo (serializer, convolutor, parallelizer e datapath) e implementa tramite tre \textbf{process} (\textit{FSM\_STATE\_CHANGE, FSM\_FLOW, FSM\_OUT}). Questa FSM permette di controllare il flusso d'esecuzione di tutto il dispositivo portando i segnali di controllo ai valori corretti in base allo stato in cui ci si trova.
+Il progetto è tutto contenuto all'interno della entity Vivado \textbf{project\_reti\_logiche}. Questa contiene al suo interno tutti i \textbf{components} del dispositivo (serializer, convolutor, parallelizer e datapath) e implementa tramite tre \textbf{process} (\textit{FSM\_STATE\_CHANGE, FSM\_FLOW, FSM\_OUT}) il suo comportamento. Questa FSM permette di controllare il flusso d'esecuzione di tutto il dispositivo portando i segnali di controllo ai valori corretti in base allo stato in cui ci si trova.
 
 \subsection{Elenco delle transizioni}
 Segue un elenco delle transizioni. Vedi figura \ref{fig:FSM Flow}
@@ -375,7 +375,7 @@ Essendo la memoria sincrona, essa rilasia il dato richiesto al ciclo di clock pr
 \subsubsection{READ\_RAM\_REQUEST}
 READ\_RAM\_REQUEST è lo stato che richiede alla memoria RAM il byte dello stream da leggere per proseguire con l'elaborazione. Per questo utilizza il mux di selettore indirizzo a 00 in modo da andare a leggere dall'indirizzo di lettura già contenuto nel registro di count. 
 
-Oltre all'interrogaizone della RAM lo stato effettua una funzione di controllo: se dal datapth arriva il segnale \textit{o\_done\_signal} il prossimo stato non sarà quello di caricamento nel registro in della parola letta dalla memoria ma lo stato di DONE, dove viene notificata la fine dell'elaborazione.
+Oltre all'interrogazione della RAM lo stato effettua una funzione di controllo: se dal datapth arriva il segnale \textit{o\_done\_signal} il prossimo stato non sarà quello di caricamento nel registro in della parola letta dalla memoria ma lo stato di DONE, dove viene notificata la fine dell'elaborazione.
 
 \begin{table}[H]
   \centering
@@ -560,7 +560,7 @@ Durante questo ciclo di clock la RAM sta completando il caricamento del secondo 
 \end{table}
 
 \subsubsection{DONE}
-Questo è lo stato di fine elaborazione. Esso porta il segnale \textit{o\_done} a alto. Si resta in questo stato fintantochè il segnale di start non viene riabbassato dall'utente. A quel punto la macchina tornerà nello stati iniziale (RESET) abbassando il segnale di done e rendendolo prondo per una nuova elaborazione, come da specifica.
+Questo è lo stato di fine elaborazione. Esso porta il segnale \textit{o\_done} a alto. Si resta in questo stato fintantochè il segnale di start non viene riabbassato dall'utente. A quel punto la macchina tornerà nello stato iniziale (RESET) abbassando il segnale di done e rendendolo pronto per una nuova elaborazione, come da specifica.
 \begin{table}[H]
   \centering
   \begin{tabular}{||c | c||} 
